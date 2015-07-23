@@ -1,0 +1,58 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Grupos de Medios</h1>
+          <h2>Tenemos registrados {{ grupo_list.count }} grupos de medios de comunicación en Chile. Conoce la <a href="/medioschile/metodologia">metodología</a> usada para esta investigación y <a href="/medioschile/datos">descarga los datos</a>.</h2>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+        <!-- <div class="pager-info">
+          <span class="right">Descargar: <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></span>
+        </div> -->
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+
+    <thead>
+    <tr>
+    <th width="33%" align="left">Nombre Grupo</th>
+    <th width="33%" align="left">Controlador</th>
+    <th width="33%" align="left">País de Origen</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for grupo in grupo_list %}
+        <tr>
+        <td><a href="{{ grupo.pk }}" title="Ver detalle de {{ grupo.grupo }}">{{ grupo.grupo | default:"No hay información" }}</a></td>
+        <td>
+        {% if grupo.controladorgrupo and grupo.linkgrupo %}
+        <a href="{{ grupo.linkgrupo }}" target="_blank" title="Leer en Poderopedia perfil de {{ grupo.controladorgrupo }}">{{ grupo.controladorgrupo }}</a>
+        {% else %}
+        {{ grupo.controladorgrupo | default:"No hay información" }}
+        {% endif %}
+        </td>
+        <td>{{ grupo.paisorigen | default:"No hay información" }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

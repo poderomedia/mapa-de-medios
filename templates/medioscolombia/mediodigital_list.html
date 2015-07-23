@@ -1,0 +1,60 @@
+{% extends "medioscolombia/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Medios Digitales de Colombia</h1>
+          <h2>Tenemos registrados {{ mediodigital_list.count }} Medios Digitales de Colombia. Conoce la <a href="/medioscolombia/metodologia">metodología</a> usada para esta investigación y descarga los <a href="/medioscolombia/datos">datos.</a></h2>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+        <!-- <div class="pager-info">
+          <span class="right">Descargar: <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></span>
+        </div> -->
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+
+    <thead>
+    <tr>
+    <th width="5%" align="left">Medio</th>
+    <th width="15%" align="left"></th>
+    <th width="25%" align="left">Propietario</th>
+    <th width="15%" align="left">Nativo/Asociado</th>
+    <th width="10%" align="left">Cobertura</th>
+    <th width="15%" align="left">Grupo</th>
+    <th width="15%" align="left">Web</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for mediodigital in mediodigital_list %}
+        <tr>
+        <td><img class="img-circle" src="{{ MEDIA_URL }}{{ mediodigital.logo }}" width="50px"/></td>
+        <td><a href="{{ mediodigital.pk }}">{{ mediodigital.medio }}</a></td>
+        <td>{% for propietario in mediodigital.propietario.all %}<a href="/medioscolombia/propietario/{{ propietario.id }}">{{ propietario }}</a>{% empty %}No hay información{% endfor %}</td>
+        <td>{{ mediodigital.nativoasociado | default:"No hay información" }}</td>
+        <td>{{ mediodigital.cobertura | default:"No hay información" }}</td>
+        <td>{{ mediodigital.grupo | default:"No hay información" }}</td> 
+        <td>{% if mediodigital.sitioweb %}<a href="{{ mediodigital.sitioweb }}">{{ mediodigital.sitioweb | truncatechars:20 }}</a>{% else %}No hay información{% endif %}</td> 
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

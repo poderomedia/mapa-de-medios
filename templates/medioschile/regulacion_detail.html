@@ -1,0 +1,86 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-profile row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+        <nav class="breadcrumb">
+          <ul>
+            <li><i class="icon icon-16 flaticon solid right-square-2"></i></li>
+            <li><a href="/medioschile/index">Medios Chile ›</a></li>
+            <li><a href="/medioschile/regulacion">Legislación ›</a></li>
+            <li class="active">{{ object.documento }}</li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row section-profile-header">
+      <div class="col16">
+        <div class="profile-wrapper">
+          <div class="profile-title">
+            <h1>{{ object.documento }}</h1>
+          </div>
+          <div class="profile-info">
+            <ul>
+              <li><i class="icon icon-16 flaticon solid compose-1"></i> Información recogida en período 15 Abril 2015 a 18 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon solid repeat-4"></i> Actualizado en 15 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon stroke download-2"></i> Descargar <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></li>
+              <li><i class="icon icon-16 flaticon solid magic-wand-1"></i> <a href="#">Aportar información</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid clipboard-2"></i>
+          </span>
+          <h4>Información de la norma</h4>
+        </div>
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+    
+            {% if object.tipodocumento %}
+            <tr>
+              <th class="aright">Tipo de norma:</th>
+              <td class="text text-s">{{ object.tipodocumento }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.descripciondocumento %}
+            <tr>
+              <th class="aright">Descripción de la norma:</th>
+              <td class="text text-s">{{ object.descripciondocumento | linebreaks }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.actores %}
+            <tr>
+              <th class="aright">Actores involucrados:</th>
+              <td class="text text-s">{{ object.actores | linebreaks }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.linkdocumento %}
+            <tr>
+              <th class="aright">URL del documento:</th>
+              <td class="text text-s"><a href="{{ object.linkdocumento }}">{{ object.linkdocumento }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+</section>    
+  
+{% endblock %}

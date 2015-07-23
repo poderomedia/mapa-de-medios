@@ -1,0 +1,85 @@
+.dropdown {
+	position: relative;
+	.dropdown-toggle {
+		position: relative;
+		z-index: 1;
+		outline: none;
+		.arrow {
+			@include position(absolute, 50% 0 0 0);
+			width: 16px;
+			height: 16px;
+			margin: -8px 0;
+			&:before {
+				@include icon-config;
+				font-family: 'Flaticons Stroke';
+				content: "\e5a5";
+				font-size: 16px !important;
+			}
+		}
+	}
+	.dropdown-menu {
+		@include position(absolute, (32px + 5px) 0 0 0);
+		@include transition(opacity .1s linear);
+		@include clearfix;
+		@include prefix(box-sizing, border-box);
+		z-index: 2;
+		min-width: 100%;
+		background: white;
+		height: 0;
+		overflow: hidden;
+		@include opacity(0);
+	}
+
+	&.open {
+		.dropdown-toggle {
+			.arrow {
+				&:before {
+					content: "\e5a4";
+				}
+			}
+		}
+
+		.dropdown-menu {
+			@include prefix(border-radius, 2px);
+			height: auto;
+			@include prefix(box-shadow, rgba(black, .2) 0 0 10px);
+			@include opacity(1);
+		}
+	}
+
+
+
+	&.dropdown-nav {
+		&.with-count {
+			.dropdown-menu {
+				min-width: 230px;
+				a {
+					span {
+						float: right;
+						color: $color-label;
+					}
+				}
+			}
+		}
+		.dropdown-menu {
+			a {
+				@extend .link-primary;
+			}
+		}
+		&.open {
+			.dropdown-menu {
+				padding: 15px 20px;
+				@include breakpoint($max, $s-screen) {
+					padding: 10px 15px; 
+				}
+				a {
+					display: block;
+					padding: 5px 0;
+					@include ellipsis;
+				}
+			}
+		}
+	}
+
+
+}

@@ -1,0 +1,53 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Legislación de la industria de medios</h1>
+          <h2>Listado de leyes, decretos y otras normas regulatorias de la industria de medios de Chile. <a href="/medioschile/datos">Descarga los datos</a>.
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+        <!-- <div class="pager-info">
+          <span class="right">Descargar: <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></span>
+        </div> -->
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+
+    <thead>
+    <tr>
+    <th width="40%" align="left">Título de la norma</th>
+    <th width="20%" align="left">Tipo de norma</th>
+    <th width="40%" align="left">URL del documento</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for regulacion in regulacion_list %}
+        <tr>
+        <td><a href="{{ regulacion.pk }}" title="Ver detalle de {{ regulacion.documento }}">{{ regulacion.documento | default:"No hay información" }}</a></td>
+        <td>{{ regulacion.tipodocumento | default:"No hay información" }}</td>
+        <td>{% if regulacion.linkdocumento %}<a href="{{ regulacion.linkdocumento }}">{{ regulacion.linkdocumento | truncatechars:20 }}</a>{% else %}No hay información{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+      </div>
+    </div>
+</section>
+
+{% endblock %}
+

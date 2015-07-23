@@ -1,0 +1,700 @@
+{% extends "medioscolombia/base.html" %}
+{% block content %}
+<section class="section-profile row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+        <nav class="breadcrumb">
+          <ul>
+            <li><i class="icon icon-16 flaticon solid right-square-2"></i></li>
+            <li><a href="/medioscolombia/index">Medios Colombia ›</a></li>
+            <li><a href="/medioscolombia/propietario">Propietarios de Medios ›</a></li>
+            <li class="active">{{ object.propietario }}</li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row section-profile-header">
+      <div class="col16">
+        <div class="profile-wrapper">
+            <div class="profile-logo">
+            <p><img src="{{ MEDIA_URL }}medios/business.png" width="110" /></p>
+            </div>
+          <div class="profile-title">
+            <h1>{{ object.propietario }}</h1>
+          </div>
+          <div class="profile-info">
+            <ul>
+              <li><i class="icon icon-16 flaticon solid compose-1"></i> Información recogida en período 15 Abril 2015 a 18 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon solid repeat-4"></i> Actualizado en 15 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon stroke download-2"></i> Descargar <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></li>
+              <li><i class="icon icon-16 flaticon solid magic-wand-1"></i> <a href="#">Aportar información</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid clipboard-2"></i>
+          </span>
+          <h4>Información General</h4>
+        </div>
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+
+            {% if object.tiposociedad %}
+            <tr>
+              <th class="aright">Tipo de Entidad:</th>
+              <td class="text text-s">{{ object.tiposociedad }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.rutpropietario %}
+            <tr>
+              <th class="aright">R.U.T.:</th>
+              <td class="text text-s">{{ object.rutpropietario }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.presidentedirectorio %}
+            {% if object.presidentedirectorio.linkempresario %} 
+            <tr>
+              <th class="aright">Presidente Directorio:</th>
+              <td class="text text-s"><a href="{{ object.presidentedirectorio.linkempresario }}" target="_blank">{{ object.presidentedirectorio }}</a></td>
+            </tr>
+            {% else %}
+            <tr>
+              <th class="aright">Presidente Directorio:</th>
+              <td class="text text-s">{{ object.presidentedirectorio }}</td>
+            </tr>
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.miembrosdirectorio.all %}
+            <tr>
+              <th class="aright">Miembros Directorio:</th>
+              <td class="text text-s">
+              {% for miembrodirectorio in object.miembrosdirectorio.all %}
+                {% if miembrodirectorio.linkempresario %}
+                 <a href="{{ miembrodirectorio.linkempresario }}" target="_blank">{{ miembrodirectorio }}</a> · 
+                {% else %}
+                 {{ miembrodirectorio }} · 
+                {% endif %}
+              {% endfor %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <th class="aright">Miembros Directorio:</th>
+              <td class="text text-s">No tenemos este dato. <a href="">Aporte información a Mapa de Medios</a>.</td>
+            </tr>
+            {% endif %}
+
+            {% if object.utilidades %}
+            <tr>
+              <th class="aright">Utilidades:</th>
+              <td class="text text-s">{{ object.utilidades }}<br>
+              {{ object.infoutilidades }}<br>
+              <a href="">{{ object.fuenteutilidades.fuente }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>    
+    
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid government-1"></i>
+          </span>
+          <h4>Estructura de Propiedad</h4>
+        </div>
+
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+
+            <tr>
+    {% if object.propietariopropietario %}          
+            <th class="aright">{{ object.propietario }} es controlado por:</th>
+              
+              <td class="text text-s">
+            <p>
+   » <a href="/medioscolombia/propietario/{{ object.propietariopropietario.pk }}">{{ object.propietariopropietario }}</a>
+   {% if object.pcentpropietario %}
+    ({{ object.pcentpropietario }} %)
+    {% else %}{% endif %}<br>
+    
+    {% if object.propietariopropietario.sociedadcontroladora %}
+    <p>La propiedad de {{ object.propietariopropietario }} pertenece a: 
+    <br> » {{ object.propietariopropietario.sociedadcontroladora }}{% if object.propietariopropietario.pcentsociedadcontroladora %} ({{ object.propietariopropietario.pcentsociedadcontroladora }} %)
+    {% else %}{% endif %}<br>         
+        {% if object.propietariopropietario.sociedadcontroladora.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.sociedadcontroladora.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.sociedadcontroladora.controlador.controlador %}
+         de {{ object.propietariopropietario.sociedadcontroladora.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedada %}
+    <br> » {{ object.propietariopropietario.otrasociedada }}{% if object.propietariopropietario.pcentsociedada %} ({{ object.propietariopropietario.pcentsociedada }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedada.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedada.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedada.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedada.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadb %}
+    <br> » {{ object.propietariopropietario.otrasociedadb }}{% if object.propietariopropietario.pcentsociedadb %} ({{ object.propietariopropietario.pcentsociedadb }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadb.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadb.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadb.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadb.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadc %}
+    <br> » {{ object.propietariopropietario.otrasociedadc }}{% if object.propietariopropietario.pcentsociedadc %} ({{ object.propietariopropietario.pcentsociedadc }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadc.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadc.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadc.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadc.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadd %}
+    <br> » {{ object.propietariopropietario.otrasociedadd }}{% if object.propietariopropietario.pcentsociedadd %} ({{ object.propietariopropietario.pcentsociedadd }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadd.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadd.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadd.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadd.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedade %}
+    <br> » {{ object.propietariopropietario.otrasociedade }}{% if object.propietariopropietario.pcentsociedade %} ({{ object.propietariopropietario.pcentsociedade }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedade.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedade.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedade.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedade.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadf %}
+    <br> » {{ object.propietariopropietario.otrasociedadf }}{% if object.propietariopropietario.pcentsociedadf %} ({{ object.propietariopropietario.pcentsociedadf }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadf.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadf.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadf.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadf.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadg %}
+    <br> » {{ object.propietariopropietario.otrasociedadg }}{% if object.propietariopropietario.pcentsociedadg %} ({{ object.propietariopropietario.pcentsociedadg }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadg.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadg.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadg.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadg.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadh %}
+    <br> » {{ object.propietariopropietario.otrasociedadh }}{% if object.propietariopropietario.pcentsociedadh %} ({{ object.propietariopropietario.pcentsociedadh }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadh.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadh.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadh.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadh.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadi %}
+    <br> » {{ object.propietariopropietario.otrasociedadi }}{% if object.propietariopropietario.pcentsociedadi %} ({{ object.propietariopropietario.pcentsociedadi }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadi.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadi.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadi.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadi.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadj %}
+    <br> » {{ object.propietariopropietario.otrasociedadj }}{% if object.propietariopropietario.pcentsociedadj %} ({{ object.propietariopropietario.pcentsociedadj }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadj.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadj.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadj.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadj.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadk %}
+    <br> » {{ object.propietariopropietario.otrasociedadk }}{% if object.propietariopropietario.pcentsociedadk %} ({{ object.propietariopropietario.pcentsociedadk }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadk.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadk.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadk.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadk.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadl %}
+    <br> » {{ object.propietariopropietario.otrasociedadl }}{% if object.propietariopropietario.pcentsociedadl %} ({{ object.propietariopropietario.pcentsociedadl }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadl.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadl.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadl.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadl.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadm %}
+    <br> » {{ object.propietariopropietario.otrasociedadm }}{% if object.propietariopropietario.pcentsociedadm %} ({{ object.propietariopropietario.pcentsociedadm }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadm.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadm.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadm.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadm.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    {% if object.propietariopropietario.otrasociedadn %}
+    <br> » {{ object.propietariopropietario.otrasociedadn }}{% if object.propietariopropietario.pcentsociedadn %} ({{ object.propietariopropietario.pcentsociedadn }} %)
+    {% else %}{% endif %}<br>
+        {% if object.propietariopropietario.otrasociedadn.controlador %}
+        &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ object.propietariopropietario.otrasociedadn.controlador }}
+        {% else %}
+        {% endif %}
+        {% if object.propietariopropietario.otrasociedadn.controlador.controlador %}
+         de {{ object.propietariopropietario.otrasociedadn.controlador.controlador }}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}    
+    </p>
+        </td>
+        </tr>
+
+    {% else %}
+            {% if object.sociedadcontroladora %}
+            <tr>
+              <th class="aright">Socios:</th>
+              <td class="text text-s">
+            <p>
+            {{ object.propietario }} es propiedad de:
+            <br> » {{ object.sociedadcontroladora }}{% if object.pcentsociedadcontroladora %} ({{ object.pcentsociedadcontroladora }} %){% else %}{% endif %}
+            {% if object.sociedadcontroladora.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.sociedadcontroladora.controlador }}
+            {% else %}
+            {% endif %}
+             {% if object.sociedadcontroladora.controlador.controlador %} 
+             de {{ object.sociedadcontroladora.controlador.controlador }}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedada %}
+            <br> » {{ object.otrasociedada }}{% if object.pcentsociedada %} ({{ object.pcentsociedada }} %){% else %}{% endif %}
+            {% if object.otrasociedada.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedada.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedada.controlador.controlador %} 
+            de {{ object.otrasociedada.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadb %}
+            <br> » {{ object.otrasociedadb }}{% if object.pcentsociedadb %} ({{ object.pcentsociedadb }} %){% else %}{% endif %}
+            {% if object.otrasociedadb.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadb.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadb.controlador.controlador %} 
+            de {{ object.otrasociedadb.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadc %}
+            <br> » {{ object.otrasociedadc }}{% if object.pcentsociedadc %} ({{ object.pcentsociedadc }} %){% else %}{% endif %}
+            {% if object.otrasociedadc.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadc.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadc.controlador.controlador %} 
+            de {{ object.otrasociedadc.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadd %}
+            <br> » {{ object.otrasociedadd }}{% if object.pcentsociedadd %} ({{ object.pcentsociedadd }} %){% else %}{% endif %}
+            {% if object.otrasociedadd.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadd.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadd.controlador.controlador %} 
+            de {{ object.otrasociedadd.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedade %}
+            <br> » {{ object.otrasociedade }}{% if object.pcentsociedade %} ({{ object.pcentsociedade }} %){% else %}{% endif %}
+            {% if object.otrasociedade.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedade.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedade.controlador.controlador %} 
+            de {{ object.otrasociedade.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadf %}
+            <br> » {{ object.otrasociedadf }}{% if object.pcentsociedadf %} ({{ object.pcentsociedadf }} %){% else %}{% endif %}
+            {% if object.otrasociedadf.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadf.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadf.controlador.controlador %} 
+            de {{ object.otrasociedadf.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %
+            {% endif %}
+
+            {% if object.otrasociedadg %}
+            <br> » {{ object.otrasociedadg }}{% if object.pcentsociedadg %} ({{ object.pcentsociedadg }} %){% else %}{% endif %}
+            {% if object.otrasociedadg.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadg.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadg.controlador.controlador %} 
+            de {{ object.otrasociedadg.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %
+            {% endif %}
+
+            {% if object.otrasociedadh %}
+            <br> » {{ object.otrasociedadh }}{% if object.pcentsociedadh %} ({{ object.pcentsociedadh }} %){% else %}{% endif %}
+            {% if object.otrasociedadh.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadh.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadh.controlador.controlador %} 
+            de {{ object.otrasociedadh.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %
+            {% endif %}
+
+            {% if object.otrasociedadi %}
+            <br> » {{ object.otrasociedadi }}{% if object.pcentsociedadi %} ({{ object.pcentsociedadi }} %){% else %}{% endif %}
+            {% if object.otrasociedadi.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadi.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadi.controlador.controlador %} 
+            de {{ object.otrasociedadi.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadj %}
+            <br> » {{ object.otrasociedadj }}{% if object.pcentsociedadj %} ({{ object.pcentsociedadj }} %){% else %}{% endif %}
+            {% if object.otrasociedadj.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadj.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadj.controlador.controlador %} 
+            de {{ object.otrasociedadj.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadk %}
+            <br> » {{ object.otrasociedadk }}{% if object.pcentsociedadk %} ({{ object.pcentsociedadk }} %){% else %}{% endif %}
+            {% if object.otrasociedadk.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadk.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadk.controlador.controlador %} 
+            de {{ object.otrasociedadk.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadl %}
+            <br> » {{ object.otrasociedadl }}{% if object.pcentsociedadl %} ({{ object.pcentsociedadl }} %){% else %}{% endif %}
+            {% if object.otrasociedadl.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadl.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadl.controlador.controlador %} 
+            de {{ object.otrasociedadl.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadm %}
+            <br> » {{ object.otrasociedadm }}{% if object.pcentsociedadm %} ({{ object.pcentsociedadm }} %){% else %}{% endif %}
+            {% if object.otrasociedadm.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadm.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadm.controlador.controlador %} 
+            de {{ object.otrasociedadm.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if object.otrasociedadn %}
+            <br> » {{ object.otrasociedadn }}{% if object.pcentsociedadn %} ({{ object.pcentsociedadn }} %){% else %}{% endif %}
+            {% if object.otrasociedadn.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ object.otrasociedadn.controlador }}
+            {% else %}
+            {% endif %}
+            {% if object.otrasociedadn.controlador.controlador %} 
+            de {{ object.otrasociedadn.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+        </p>
+            </td>
+            </tr>
+        {% else %}
+        <tr>
+        <th class="aright"></th>
+        <td class="text text-s">No tenemos estos datos. <a href="">Aporte información a Mapa de Medios</a>.</td>
+        </tr>    
+        {% endif %}
+        {% endif %}
+
+
+    {% if object.fuentepropietario %}
+    <tr>
+              <th class="aright">Fuente datos de propiedad:</th>
+              <td class="text text-s"><a href="{{ object.fuentepropietario.linkfuente }}">{{ object.fuentepropietario | truncatechars:100 }}</a></td>
+    </tr>
+    {% else %}    
+    {% endif %}
+
+    {% if object.grupo %}
+        <tr>
+            <th class="aright">Grupo de Medios:</th>
+            <td class="text text-s">{{ object.propietario }} es parte de {{ object.grupo }}
+            </td>
+        </tr>
+        {% if object.grupo.controladorgrupo %}
+        {% if object.grupo.linkgrupo %}
+        <tr>  
+            <th class="aright">Controlado por:</th>
+            <td class="text text-s"><a href="{{ object.grupo.linkgrupo }}" target="_blank">{{ object.grupo.controladorgrupo }}</a></td>
+        </tr>
+        {% else %}
+        <tr>  
+            <th class="aright">Controlado por:</th>
+            <td class="text text-s">{{ object.grupo.controladorgrupo }}</td>
+        </tr>
+        {% endif %}
+
+        {% if object.grupo.otrosnegociosgrupo.all %}
+        <tr>
+            <th class="aright">Intereses del controlador en otros sectores:</th>
+            <td class="text text-s">
+            {% for sectores in object.grupo.otrosnegociosgrupo.all %}
+            {{ sectores.sector }} · 
+            {% empty %}
+            {% endfor %}
+            </td>
+        </tr>
+        {% else %}
+        {% endif %}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+
+    </tbody>
+    </table>
+    </div>
+  </div>
+
+<div class="row">
+        <div class="col16">
+          <div class="heading heading-s with-icon">
+            <span class="icon-heading">
+              <i class="icon icon-16 flaticon solid clipboard-2"></i>
+            </span>
+            <h4>Medios de {{ object.propietario }}</h4>
+          </div>
+
+<div class="btn-group">
+  <ul>
+      {% for canaltv in propietario_detail.propietario_canaltv.all %}
+        <li><a href="/medioscolombia/canaltvlist/{{ canaltv.id }}" class="btn btn-medio btn-tv"><i class="icon icon-16 flaticon solid tv-1"></i>{{ canaltv.medio }}</a></li>
+        {% empty %}
+        {% endfor %}
+
+      {% for escrito in propietario_detail.propietario_escrito.all %}
+        <li><a href="/medioscolombia/escritolist/{{ escrito.id }}" class="btn btn-medio btn-magazine"><i class="icon icon-16 flaticon solid open-book-3"></i>{{ escrito.medio }}</a></li>
+        {% empty %}
+        {% endfor %}
+
+      {% for radio in propietario_detail.propietario_radio.all %}
+        <li><a href="/medioscolombia/radiolist/{{ radio.id }}" class="btn btn-medio btn-radio"><i class="icon icon-16 flaticon solid microphone-1"></i>{{ radio.medio }}</a></li>
+        {% empty %}
+        {% endfor %}
+
+      {% for mediodigital in propietario_detail.propietario_mediodigital.all %}
+        <li><a href="/medioscolombia/mediodigitallist/{{ mediodigital.id }}" class="btn btn-medio btn-digital"><i class="icon icon-16 flaticon solid macbook-1"></i>{{ mediodigital.medio }}</a></li>
+        {% empty %}
+        {% endfor %}
+
+    </ul>
+</div>
+
+
+  </div>
+</div>
+
+{% if object.grupo %}
+<div class="row">
+        <div class="col16">
+          <div class="heading heading-s with-icon">
+            <span class="icon-heading">
+              <i class="icon icon-16 flaticon solid clipboard-2"></i>
+            </span>
+            <h4>Medios de {{ object.grupo }}</h4>
+          </div>
+<div class="btn-group">
+  <ul>
+  {% if object.grupo.canaltvsgrupo %}
+      {% for otrocanaltv in object.grupo.canaltvsgrupo.all %}
+        <li><a href="/medioscolombia/canaltvlist/{{ otrocanaltv.id }}" class="btn btn-medio btn-tv"><i class="icon icon-16 flaticon solid tv-1"></i>{{ otrocanaltv }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.grupo.escritosgrupo %}
+      {% for otroescrito in object.grupo.escritosgrupo.all %}
+        <li><a href="/medioscolombia/escritolist/{{ otroescrito.id }}" class="btn btn-medio btn-magazine"><i class="icon icon-16 flaticon solid open-book-3"></i>{{ otroescrito }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.grupo.radiosgrupo %}
+      {% for otroradio in object.grupo.radiosgrupo.all %}
+        <li><a href="/medioscolombia/radiolist/{{ otroradio.id }}" class="btn btn-medio btn-radio"><i class="icon icon-16 flaticon solid microphone-1"></i>{{ otroradio }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.grupo.digitalesgrupo %}
+      {% for otromediodigital in object.grupo.digitalesgrupo.all %}
+        <li><a href="/medioscolombia/mediodigitallist/{{ otromediodigital.id }}" class="btn btn-medio btn-digital"><i class="icon icon-16 flaticon solid macbook-1"></i>{{ otromediodigital }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+    </ul>
+    </div>
+
+  </div>
+</div>
+
+{% endif %}
+
+
+</section>    
+  
+{% endblock %}

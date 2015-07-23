@@ -1,0 +1,41 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-article row-module row-module-s-top">
+      <div class="row">
+        <div class="col12 prefix2">
+          <nav class="breadcrumb">
+            <ul>
+              <li><i class="icon icon-16 flaticon solid right-square-2"></i></li>
+              <li><a href="{% url 'medioschile:index' %}">Medios Chile ›</a></li>
+              <li><a href="{% url 'medioschile:analisislist' %}">Análisis ›</a></li>
+              <li class="active">{{ object.titulo }}</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col12 prefix2">
+
+          <article class="post">
+            <div class="post-title">
+              <h1>{{ object.titulo }}</h1>
+              <h2>{{ object.subtitulo }}</h2>
+              <div class="post-metadatos">
+                <ul>
+                  <li class="with-icon"><i class="icon icon-16 flaticon solid clock-1"></i> Publicado el {{ object.fecha }}</li>
+                  <li>por {{ object.autor }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="post-body text">
+
+              {{ object.cuerpo|safe }}
+
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}
+

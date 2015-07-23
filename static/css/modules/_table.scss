@@ -1,0 +1,183 @@
+$table-break: $s-screen;
+
+
+.pager-info {
+	padding: 20px 0;
+	a {
+		font-weight: bold;
+		@extend .link-primary;
+	}
+}
+.table {
+	width: 100%;
+	background: white;
+	@include prefix(border-radius, 2px);
+
+	div {
+		&.column-label,
+		&.column-value {
+			display: inline-block;
+			@include prefix(box-sizing, border-box);
+			@include breakpoint($max, $table-break) {
+				float: left;
+				width: 50%;
+				display: block !important;
+			}
+		}
+		&.column-label {
+			display: none;
+			@include breakpoint($max, $table-break) {
+				padding-right: 10px;
+				text-align: left;
+				color: darken($color-base, 20%);
+			}
+		}
+		&.column-value {
+			@include breakpoint($max, $table-break) {
+				padding-left: 10px;
+				text-align: right;
+			}
+		}
+	}
+	.column {
+		&.column--alt {
+			@include breakpoint($max, $table-break) {
+				+ {
+					.column {
+						padding-top: 15px;
+					}
+				}
+			}
+		}
+		&.column--options {
+			text-align: right;
+			@include breakpoint($max, $table-break) {
+				text-align: left;
+				padding-bottom: 15px;
+			}
+		}
+	}
+
+	thead {
+		th {
+			text-align: left;
+			font-weight: bold;
+			border-bottom: 1px solid $color-info;
+			text-transform: uppercase;
+			font-size: 11px;
+			color: darken($color-base, 20%);
+			height: 36px;
+			padding: 0 20px;
+			line-height: 36px;
+			background: $color-bg-light;
+			@include ellipsis;
+		}
+		@include breakpoint($max, $table-break) {
+			display: none;
+		}
+	}
+
+
+	tbody, 
+	tfoot {
+		tr {
+			@include breakpoint($max, $table-break) {
+				display: block;
+			}
+			th, td {
+				padding: 15px 20px;
+				line-height: 1.5em;
+				@include clearfix;
+				@include breakpoint($max, $table-break) {
+					display: block;
+					width: 100%;
+					padding: 5px 15px;
+					@include prefix(box-sizing, border-box);
+					vertical-align: top;
+					&.aright {
+						text-align: left !important;
+					}
+				}
+			}
+			th {
+				text-align: left;
+				font-weight: bold;
+				color: darken($color-base, 20%);
+				&.column {
+					&.column--alt {
+						@include breakpoint($max, $table-break) {
+							background: $color-bg-light;
+							border-bottom: 1px solid $color-info;
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+
+
+
+
+	&.table-bordered {
+		border: 1px solid $color-border-light;
+	}
+	&.table-condensed {
+		tbody, tfoot {
+			th, td {
+				padding: 5px 20px;
+				@include breakpoint($max, $table-break) {
+					padding: 5px 15px;
+				}
+			}
+		}
+	}
+	&.table-striped {
+		@include breakpoint($min, $table-break) {
+			tbody, tfoot {
+				tr {
+					&:nth-child(even) {
+						background: $color-bg-light;
+					}
+				}
+			}
+		}
+	}
+	&.table-hover {
+		@include breakpoint($min, $table-break) {
+			tbody {
+				tr {
+					&:hover {
+						td, th {
+							background: lighten($color-bg-light, 1%);
+						}
+					}
+				}
+			}
+		}
+	}
+	&.table-info {
+		tr {
+			th {
+				background: $color-bg-light;
+			}
+			&:first-child {
+				td, th {
+					padding-top: 20px;
+					@include breakpoint($max, $table-break) {
+						padding-top: 5px;
+					}
+				}
+			}
+			&:last-child {
+				td, th {
+					padding-bottom: 20px;
+					@include breakpoint($max, $table-break) {
+						padding-bottom: 5px;
+					}
+				}
+			}
+		}
+	}
+}

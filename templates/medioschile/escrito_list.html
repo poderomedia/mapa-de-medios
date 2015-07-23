@@ -1,0 +1,62 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Medios Impresos de Chile</h1>
+          <h2>Tenemos registrados {{ escrito_list.count }} Medios Impresos de Chile, sumando diarios y revistas. Conoce la <a href="/medioschile/metodologia/">metodología</a> usada para esta investigación y <a href="/medioschile/datos/">descarga los datos</a>.</h2>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+        <!-- <div class="pager-info">
+          <span class="right">Descargar: <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></span>
+        </div> -->
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+    
+    <thead>
+    <tr>
+    <th width="5%" align="left">Medio</th>
+    <th width="10%" align="left"></th>
+    <th width="20%" align="left">Propietario</th>
+    <th width="10%" align="left">Tipo</th>
+    <th width="15%" align="left">Periodicidad</th>
+    <th width="10%" align="left">Cobertura</th>
+    <th width="10%" align="left">Grupo</th>
+    <th width="15%" align="left">Web</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for escrito in escrito_list %}
+        <tr>
+        <td><img class="img-circle" src="{{ MEDIA_URL }}{{ escrito.logo }}" width="50px"/></td>
+        <td><a href="{{ escrito.pk }}">{{ escrito.medio }}</a></td>
+        <td>{% for propietario in escrito.propietario.all %}<a href="/medioschile/propietario/{{ propietario.id }}">{{ propietario }}</a>{% empty %}No hay información{% endfor %}</td>
+        <td>{{ escrito.tipo | default:"" }} {{ escrito.pagado_gratuito | default:"" }}</td>
+        <td>{{ escrito.periodicidad | default:"" }}</td>
+        <td>{{ escrito.circulacion | default:"" }}</td>  
+        <td>{{ escrito.grupo | default:"No hay información" }}</td> 
+        <td>{% if escrito.sitioweb %}<a href="{{ escrito.sitioweb }}">{{ escrito.sitioweb | truncatechars:20 }}</a>{% else %}No hay información{% endif %}</td> 
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

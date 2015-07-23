@@ -1,0 +1,6 @@
+{{ object.propietario }}
+{{ object.grupo }}
+{{ object.escritospropietario }}
+{{ object.radiospropietario }}
+{{ object.canaltvspropietario }}
+{{ object.digitalespropietario }}

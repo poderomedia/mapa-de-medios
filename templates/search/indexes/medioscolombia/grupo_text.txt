@@ -1,0 +1,6 @@
+{{ object.grupo }}
+{{ object.controladorgrupo }}
+{{ object.escritosgrupo }}
+{{ object.radiosgrupo }}
+{{ object.canaltvsgrupo }}
+{{ object.digitalesgrupo }}

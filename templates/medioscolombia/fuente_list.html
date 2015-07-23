@@ -1,0 +1,48 @@
+{% extends "medioscolombia/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Fuentes</h1>
+          <h2>Listado de fuentes consultadas para hacer el mapa de la industria de medios de Colombia. <br><a href="/medioschile/datos">Descarga los datos</a>.
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+
+    <thead>
+    <tr>
+    <th width="40%" align="left">Fuente</th>
+    <th width="40%" align="left">Descripción</th>
+    <th width="20%" align="left">URL de la fuente</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for fuente in fuente_list %}
+        <tr>
+        <td>{{ fuente.fuente | default:"No hay información" }}</a></td>
+        <td>{{ fuente.descripcion | default:"No hay información" }}</td>
+        <td>{% if fuente.linkfuente %}<a href="{{ fuente.linkfuente }}">{{ fuente.linkfuente | truncatechars:20 }}</a>{% else %}No hay información{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

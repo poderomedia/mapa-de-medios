@@ -1,0 +1,59 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Radios de Chile</h1>
+          <h2>Tenemos registradas {{ radio_list.count }} Radios de Chile. Conoce la <a href="/medioschile/metodologia">metodología</a> usada para esta investigación y <a href="/medioschile/datos/">descarga los datos</a>.</h2>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+        <!-- <div class="pager-info">
+          <span class="right">Descargar: <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></span>
+        </div> -->
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+
+    <thead>
+    <tr>
+    <th width="5%" align="left">Medio</th>
+    <th width="20%" align="left"></th>
+    <th width="20%" align="left">Propietario</th>
+    <th width="10%" align="left">Frecuencia</th>
+    <th width="15%" align="left">Cobertura</th>
+    <th width="25%" align="left">Grupo</th>
+    <th width="15%" align="left">Web</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for radio in radio_list %}
+        <tr>
+        <td><img class="img-circle" src="{{ MEDIA_URL }}{{ radio.logo }}" width="50px"/></td>
+        <td><a href="{{ radio.pk }}">{{ radio.medio }}</a></td>
+        <td>{% for propietario in radio.propietario.all %}<a href="/medioschile/propietario/{{ propietario.id }}">{{ propietario }}</a>{% empty %}No hay información{% endfor %}</td>
+        <td>{{ radio.frecuencia | default:"No hay información" }}</td>
+        <td>{{ radio.cobertura | default:"No hay información" }}</td>
+        <td>{{ radio.grupo | default:"No hay información" }}</td> 
+        <td>{% if radio.sitioweb %}<a href="{{ radio.sitioweb }}">{{ radio.sitioweb | truncatechars:20 }}</a>{% else %}No hay información{% endif %}</td> 
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+    </tfoot>
+    </table>
+    </div>
+   </div>
+</section>
+
+{% endblock %}

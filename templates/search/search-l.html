@@ -1,0 +1,37 @@
+{% extends "medioschile/base.html" %}
+{% load medioschile_extras %}
+{% load medioscolombia_extras %}
+{% block content %}
+    <section class="section-title row-module row-module-s-bottom">
+      <div class="row">
+        <div class="col16">
+          <div class="heading">
+          <h1>Resultado de búsqueda</h1>
+          <h2>{{ page.object_list|length }} Resultados para <span class="search-results-close">“{{ query }}”</span></h2>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="row-module row-module-s-top">
+      <div class="row">
+        <div class="col16">
+    {% with page.object_list as modelapp %}
+            {% regroup modelapp|dictsort:"verbose_name_plural" by verbose_name_plural as grouped_objects %}
+            {% for ct in grouped_objects %}
+                {{ ct.grouper }}
+                {% for result in ct.list %}
+                    <p>
+                        <a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a>
+                    </p>
+                {% endfor %}
+            {% empty %}
+                <p>No results found.</p>
+            {% endfor %}
+    {% endwith %}
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+

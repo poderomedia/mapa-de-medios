@@ -1,0 +1,34 @@
+.breadcrumb {
+	ul {
+		font-size: em(13px);
+		@include clearfix;
+		li {
+			float: left;
+			display: inline-block;
+			height: 16px;
+			line-height: 18px;
+			margin: 0 10px 0 0;
+			@include ellipsis;
+			max-width: 300px;
+			@include breakpoint($max, $s-screen) {
+				max-width: 100px;
+				&:nth-last-child(n+3) {
+					display: none;
+				}
+				&:first-child {
+					display: inline-block !important;
+				}
+			}
+			a {
+				display: inline-block;
+				color: $color-base;
+				&:hover {
+					color: $color-info;
+				}
+			}
+			&.active {
+				font-weight: bold;
+			}
+		}
+	}
+}

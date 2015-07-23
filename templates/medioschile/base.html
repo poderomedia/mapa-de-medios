@@ -1,0 +1,202 @@
+{% load staticfiles %}
+{% load medioschile_extras %}
+{% load medioscolombia_extras %}
+<html lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/mediamapper.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/application.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.tableTools.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/stacktable.css' %}" />
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<title>{% block title %}Mapa de Medios{% endblock %}</title>
+</head>
+
+<body>
+
+  <header>
+      <div class="row">
+        <div class="col16">
+          <h2 class="mapademedios">
+            <a href="{% url 'medioschile:index' %}">Mapa de medios</a>
+          </h2>
+          <a href="#" class="main-nav-mobile collapsed" data-toggle="collapse" data-target="#wrap-mobile-navigation">
+            <i class="icon icon-16 flaticon stroke menu-3"></i> Mostrar menu
+          </a>
+          <div id="wrap-mobile-navigation" class="wrap-mobile-navigation collapse">
+            <nav>
+              <ul>
+                <li class="item-li"><a href="{% url 'medioschile:acercade' %}" class="item">Acerca de</a></li>
+                <li class="item-li dropdown-nav with-count dropdown">
+                  <a href="#" data-toggle="dropdown" class="dropdown-toggle item">Medios Chile <span class="arrow"></span></a>
+                  <ul class="dropdown-menu">
+                <li><a href="{% url 'medioschile:digitaleslist' %}"><span>{% contardigitales %}</span>Medios Digitales</a></li>
+                <li><a href="{% url 'medioschile:escritoslist' %}"><span>{% contarescritos %}</span>Impresos</a></li>
+                <li><a href="{% url 'medioschile:canalestvlist' %}"><span>{% contarcanalestv %}</span>Televisión</a></li>
+                <li><a href="{% url 'medioschile:radioslist' %}"><span>{% contarradios %}</span>Radio</a></li>
+                <li><a href="{% url 'medioschile:gruposlist' %}"><span>{% contargrupos %}</span>Grupos de Medios</a></li>
+                <li><a href="{% url 'medioschile:propietarioslist' %}"><span>{% contarpropietarios %}</span>Propietarios</a></li>
+                <li><a href="{% url 'medioschile:regulacioneslist' %}"><span>{% contarleyes %}</span>Legislación</a></li>
+                <li><a href="{% url 'medioschile:fuenteslist' %}"><span>{% contarfuentes %}</span>Fuentes Utilizadas</a></li>
+                  </ul>
+                </li>
+                <li class="item-li dropdown-nav with-count dropdown">
+                  <a href="#" data-toggle="dropdown" class="dropdown-toggle item">Medios Colombia <span class="arrow"></span></a>
+                  <ul class="dropdown-menu">
+                <li><a href="{% url 'medioscolombia:digitaleslist' %}"><span>{% contardigitalescol %}</span>Medios Digitales</a></li>
+                <li><a href="{% url 'medioscolombia:escritoslist' %}"><span>{% contarescritoscol %}</span>Impresos</a></li>
+                <li><a href="{% url 'medioscolombia:canalestvlist' %}"><span>{% contarcanalestvcol %}</span>Televisión</a></li>
+                <li><a href="{% url 'medioscolombia:radioslist' %}"><span>{% contarradioscol %}</span>Radio</a></li>
+                <li><a href="{% url 'medioscolombia:gruposlist' %}"><span>{% contargruposcol %}</span>Grupos de Medios</a></li>
+                <li><a href="{% url 'medioscolombia:propietarioslist' %}"><span>{% contarpropietarioscol %}</span>Propietarios</a></li>
+                <li><a href="{% url 'medioscolombia:regulacioneslist' %}"><span>{% contarleyescol %}</span>Legislación</a></li>
+                <li><a href="{% url 'medioscolombia:fuenteslist' %}"><span>{% contarfuentescol %}</span>Fuentes Utilizadas</a></li>
+                  </ul>
+                </li>
+            <li class="item-li"><a href="{% url 'medioschile:analisislist' %}" class="item">Análisis</a></li>
+            <li class="item-li"><a href="{% url 'medioschile:datos' %}" class="item">Datos</a></li>
+            <li class="item-li"><a href="{% url 'medioschile:codigo' %}" class="item">Código</a></li>
+            <li class="item-li"><a href="{% url 'medioschile:metodologia' %}" class="item">Metodología</a></li>
+              </ul>
+              <ul class="nav-s">
+                <li class="item-li"><a href="#" class="item only-icon"><i class="icon icon-16 flaticon social facebook-1"></i> Facebook</a></li>
+                <li class="item-li"><a href="https://twitter.com/poderomedia" class="item only-icon"><i class="icon icon-16 flaticon social twitter-1"></i> Twitter</a></li>
+              </ul>
+              <ul class="nav-s">
+                <li class="item-li active"><a href="." class="item">ES</a></li>
+                <li class="item-li"><a href="#" class="item">EN</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+  </header>
+  
+  {% block content %}{% endblock %}
+
+ <section class="section-logos">
+    <div class="row">
+      <div class="col6">
+        <h6>Investigación realizada por</h6>
+        <ul>
+          <li>
+            <a href="http://www.poderopedia.org">
+              <img src="{% static 'imgs/logos/poderopedia.png' %}" alt="Poderopedia" />
+            </a>
+          </li>
+          <li>
+            <a href="http://consejoderedaccion.org/">
+              <img src="{% static 'imgs/logos/consejo.png' %}" alt="Consejo de redacción" />
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col4">
+        <h6>Proyecto financiado por</h6>
+        <ul>
+          <li>
+            <a href="http://www.opensocietyfoundations.org/">
+              <img src="{% static 'imgs/logos/open.png' %}" alt="Open Society" />
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col6">
+        <h6>Colaboración</h6>
+        <ul>
+          <li>
+            <a href="http://www.uahurtado.cl/facultades-y-carreras/periodismo/">
+              <img src="{% static 'imgs/logos/uah.png' %}" alt="Universidad Alberto Hurtado" />
+            </a>
+          </li>
+          <li>
+            <a href="http://www.javeriana.edu.co">
+              <img src="{% static 'imgs/logos/javeriana.png' %}" alt="javeriana" />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row-module">
+      <div class="row">
+        <div class="col7">
+          <h3 class="mapademedios">
+            <a href="{% url 'medioschile:index' %}">Mapa de medios</a>
+          </h3>
+        </div>
+        <div class="col5">
+          <ul>
+            <li><a href="#">¿Quieres tener un sitio web como este?</a></li>
+            <li><a href="{% url 'medioschile:contacto' %}">Contacto</a></li>
+            <li><a href="{% url 'medioschile:privacidad' %}">Privacidad y Legal</a></li>
+          </ul>
+        </div>
+        <div class="col4">
+          <ul>
+            <li>
+            <a href="https://twitter.com/poderomedia" class="with-icon"><i class="icon icon-16 flaticon social twitter-1"></i>Twitter</a>
+            </li>
+            <li>
+            <a href="https://github.com/poderomedia/mapa-de-medios" class="with-icon"><i class="icon icon-16 flaticon social github-1"></i>Revisa el código en Github</a>
+            </li>
+            <li>
+            <a href="http://www.facebook.com" class="with-icon"><i class="icon icon-16 flaticon social facebook-1"></i>Facebook</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col8 credits">
+          <p>Un proyecto de Poderomedia {% now "Y" %}. El contenido de este sitio está disponible bajo licencia <a href="https://creativecommons.org/licenses/by/3.0/deed.es">Creative Commons Attribution 3.0.</a> Los datos están liberados bajo <a href="http://opendatacommons.org/licenses/odbl/1-0/">Open Database License (ODbL) v1.0.</a></p>
+        </div>
+        <div class="col7 prefix1">
+          <form class="signup-newsletters">
+            <div class="signup-form">
+              <input class="input-footer" type="text" placeholder="Registrate para recibir novedades" />
+            </div>
+            <div class="signup-submit">
+              <input type="submit" class="btn btn-primary" value="Enviar" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </footer>
+  {% block js %}
+  <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/application.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/jquery.dataTables.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/dataTables.tableTools.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/stacktable.js' %}"></script>
+  {% endblock %}
+
+<script>
+$.fn.dataTable.TableTools.defaults.aButtons = [ "csv", "xls", "pdf", ];
+$(document).ready(function() {
+    $('#TablaLista').stacktable().DataTable( {
+        order: [[1,'asc']],
+        responsive: {
+        details: true
+    },
+        search: {smart: false
+    },
+        dom: '<Tif<t>>',
+        tableTools: {
+            "sSwfPath": "../../static/swf/copy_csv_xls_pdf.swf"
+        },
+        aoColumnDefs: [
+      { bSortable: false, aTargets: [ 0 ] }],
+    } );
+} );
+</script>
+</body>
+</html>

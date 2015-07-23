@@ -1,0 +1,183 @@
+{% extends "medioschile/base.html" %}
+{% load medioschile_extras %}
+{% load medioscolombia_extras %}
+{% block content %}
+    <section class="section-title row-module row-module-s-bottom">
+      <div class="row">
+        <div class="col16">
+          <div class="heading">
+          <h1>Resultado de búsqueda</h1>
+          <h2>{{ page.object_list|length }} Resultados para <span class="search-results-close">“{{ query }}”</span></h2>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="row-module row-module-s-top">
+      <div class="row">
+        <div class="col16">
+    {% if query %}
+      {% for result in page.object_list %}
+        {% with result.object|appname as modelapp %}
+          {% if modelapp == "medioschile" %}
+            {% with result.object|classname as modelclass %}
+              <table class="display dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                <th width="25%" align="left"></th>
+                <th width="25%" align="left"></th>
+                <th width="50%" align="left"></th>
+                </tr>
+              </thead>
+              <tbody>
+
+            {% if modelclass == "Escrito" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioschile:escritodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">
+                    <span class="badge badge-medio badge-magazine">Medio Impreso</span>
+                </td>
+              </tr>
+              
+            {% elif modelclass == "CanalTV" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioschile:canaltvdetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                    <span class="badge badge-medio badge-tv">Canal de TV</span>                 
+                </td>
+              </tr>
+
+            {% elif modelclass == "Radio" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioschile:radiodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                    <span class="badge badge-medio badge-radio">Radio</span>            
+                </td>
+              </tr>
+
+            {% elif modelclass == "MedioDigital" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioschile:digitaldetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                    <span class="badge badge-medio badge-digital">Medio Digital</span>            
+                </td>
+              </tr>
+                
+            {% elif modelclass == "Propietario" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}medios/business.png" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioschile:propietariodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">
+                  <span class="badge badge-empresa">Propietario de Medios</span>
+                </td>
+              </tr>
+                
+            {% elif modelclass == "Grupo" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}medios/business.png" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioschile:grupodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                  <span class="badge badge-empresa">Grupo de Medios</span>
+                </td>
+              </tr>
+
+            {% endif %}
+
+            </tbody>
+            </table>
+            {% endwith %}
+          
+          {% elif modelapp == "medioscolombia" %}
+
+            {% with result.object|classname as modelclass %}
+              <table class="display dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                <th width="25%" align="left"></th>
+                <th width="25%" align="left"></th>
+                <th width="50%" align="left"></th>
+                </tr>
+              </thead>
+              <tbody>
+
+            {% if modelclass == "Escrito" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioscolombia:escritodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">
+                    <span class="badge badge-medio badge-magazine">Medio Impreso</span>
+                </td>
+              </tr>
+              
+            {% elif modelclass == "CanalTV" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioscolombia:canaltvdetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                    <span class="badge badge-medio badge-tv">Canal de TV</span>                 
+                </td>
+              </tr>
+
+            {% elif modelclass == "Radio" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioscolombia:radiodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                    <span class="badge badge-medio badge-radio">Radio</span>            
+                </td>
+              </tr>
+
+            {% elif modelclass == "MedioDigital" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}{{ result.object.logo }}" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioscolombia:digitaldetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                    <span class="badge badge-medio badge-digital">Medio Digital</span>            
+                </td>
+              </tr>
+                
+            {% elif modelclass == "Propietario" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}medios/business.png" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioscolombia:propietariodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">
+                  <span class="badge badge-empresa">Propietario de Medios</span>
+                </td>
+              </tr>
+                
+            {% elif modelclass == "Grupo" %}
+              <tr>
+                <td align="left"><img class="img-circle" src="{{ MEDIA_URL }}medios/business.png" width="25px"/></td>
+                <td align="left"><a href="{% url 'medioscolombia:grupodetail' result.object.pk %}">{{ result.object }}</a></td>
+                <td align="left">                  
+                  <span class="badge badge-empresa">Grupo de Medios</span>
+                </td>
+              </tr>
+
+            {% endif %}
+
+            </tbody>
+            </table>
+            {% endwith %}
+
+      {% endif %}
+          
+          
+          
+        {% endwith %}<!-- 5 -->
+      {% empty %}<!-- 3 -->
+          <h3>Su búsqueda no ha dado resultados, intente <a href="/medioschile/index/#categorias">revisando por categorías</a></h3>
+      {% endfor %}<!-- 2 -->
+
+
+    {% endif %}<!-- 1 --> 
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+

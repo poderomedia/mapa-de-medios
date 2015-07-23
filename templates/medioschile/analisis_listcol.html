@@ -1,0 +1,73 @@
+{% extends "medioschile/base.html" %}
+{% load medioschile_extras %}
+{% block content %}
+<section class="section-title row-module">
+      <div class="row">
+        <div class="col16">
+          <div class="heading acenter">
+            <h1>Análisis</h1>
+            <h2>Posteos a partir de los datos de Mapa de Medios</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-subtitle">
+      <div class="row">
+        <div class="col4">
+          <span class="label">{{ analisiscol.count }} posteos sobre Colombia</span>
+        </div>
+        <div class="col12 clearfix">
+          <div class="btn-group right">
+            <ul>
+              <li class="dropdown dropdown-nav">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-s btn-link btn-outline btn-info"><i class="icon icon-16 flaticon solid earth-1"></i> País <span class="arrow"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'medioschile:analisiscl' %}">Chile</a></li>
+                  <li><a href="{% url 'medioschile:analisiscol' %}">Colombia</a></li>
+                </ul>
+              </li>
+              <li class="dropdown dropdown-nav">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-s btn-link btn-outline btn-info"><i class="icon icon-16 flaticon solid tag-1"></i> Etiqueta <span class="arrow"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Tag #1</a></li>
+                  <li><a href="#">Tag #2</a></li>
+                  <li><a href="#">Tag #3</a></li>
+                  <li><a href="#">Tag #4</a></li>
+                  <li><a href="#">Tag #5</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-article list row-module">
+      <div class="row">
+        <div class="col12 prefix2">
+        {% for articulo in analisiscol %}
+          <article class="post">
+            <div class="post-title">
+              <h3><a href="{{ articulo.pk }}">{{ articulo.titulo }}</a></h3>
+              <div class="post-metadatos">
+                <ul>
+                  <li class="with-icon"><i class="icon icon-16 flaticon solid clock-1"></i> Publicado en {{ articulo.fecha }}</li>
+                  <li>por {{ articulo.autor }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="post-body text">
+              <figure>
+                <img src="{{ MEDIA_URL }}{{ articulo.imagen_destacada }}" />
+              </figure>
+              <p>{{ articulo.extracto }}</p>
+            </div>
+          </article>
+        {% endfor %}
+
+        </div>
+      </div>
+    </section>
+
+{% endblock %}

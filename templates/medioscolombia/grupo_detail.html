@@ -1,0 +1,143 @@
+{% extends "medioscolombia/base.html" %}
+{% block content %}
+<section class="section-profile row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+        <nav class="breadcrumb">
+          <ul>
+            <li><i class="icon icon-16 flaticon solid right-square-2"></i></li>
+            <li><a href="/medioscolombia/index">Medios Colombia ›</a></li>
+            <li><a href="/medioscolombia/grupo">Grupos de Medios ›</a></li>
+            <li class="active">{{ object.grupo }}</li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row section-profile-header">
+      <div class="col16">
+        <div class="profile-wrapper">
+            <div class="profile-logo">
+            <p><img src="{{ MEDIA_URL }}medios/business.png" width="110" /></p>
+            </div>
+          <div class="profile-title">
+            <h1>{{ object.grupo }}</h1>
+          </div>
+          <div class="profile-info">
+            <ul>
+              <li><i class="icon icon-16 flaticon solid compose-1"></i> Información recogida en período 15 Abril 2015 a 18 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon solid repeat-4"></i> Actualizado en 15 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon stroke download-2"></i> Descargar <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></li>
+              <li><i class="icon icon-16 flaticon solid magic-wand-1"></i> <a href="#">Aportar información</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid clipboard-2"></i>
+          </span>
+          <h4>Información Grupo de Medios</h4>
+        </div>
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+    
+            {% if object.paisorigen %}
+            <tr>
+              <th class="aright">País de origen:</th>
+              <td class="text text-s">{{ object.paisorigen }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.otrosnegociosgrupo.all %}
+            <tr>
+              <th class="aright">Otros negocios del Grupo:</th>
+              <td class="text text-s">{% for otros in object.otrosnegociosgrupo.all %}{{ otros }} · {% endfor %}
+              </td>
+            </tr>
+            {% else %}
+            {% endif %}
+            
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid government-1"></i>
+          </span>
+          <h4>Estructura de Propiedad</h4>
+        </div>
+
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+
+            <tr>
+            {% if object.controladorgrupo %}          
+            <th class="aright">{{ object.grupo }} es controlado por:</th> 
+            <td class="text text-s">{{ object.controladorgrupo }}</td>
+            {% else %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+<div class="row">
+        <div class="col16">
+          <div class="heading heading-s with-icon">
+            <span class="icon-heading">
+              <i class="icon icon-16 flaticon solid clipboard-2"></i>
+            </span>
+            <h4>Medios del Grupo</h4>
+          </div>
+<div class="btn-group">
+  <ul>
+  {% if object.canaltvsgrupo %}
+      {% for canaltv in object.canaltvsgrupo.all %}
+        <li><a href="/medioschile/canaltvlist/{{ canaltv.id }}" class="btn btn-medio btn-tv"><i class="icon icon-16 flaticon solid tv-1"></i>{{ canaltv }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.escritosgrupo %}
+      {% for escrito in object.escritosgrupo.all %}
+        <li><a href="/medioschile/escritolist/{{ escrito.id }}" class="btn btn-medio btn-magazine"><i class="icon icon-16 flaticon solid open-book-3"></i>{{ escrito }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.radiosgrupo %}
+      {% for radio in object.radiosgrupo.all %}
+        <li><a href="/medioschile/radiolist/{{ radio.id }}" class="btn btn-medio btn-radio"><i class="icon icon-16 flaticon solid microphone-1"></i>{{ radio }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.digitalesgrupo %}
+      {% for mediodigital in object.digitalesgrupo.all %}
+        <li><a href="/medioschile/mediodigitallist/{{ mediodigital.id }}" class="btn btn-medio btn-digital"><i class="icon icon-16 flaticon solid macbook-1"></i>{{ mediodigital }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+    </ul>
+    </div>
+
+  </div>
+</div>
+
+
+
+</section>    
+  
+{% endblock %}

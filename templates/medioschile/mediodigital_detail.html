@@ -1,0 +1,769 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-profile row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+        <nav class="breadcrumb">
+          <ul>
+            <li><i class="icon icon-16 flaticon solid right-square-2"></i></li>
+            <li><a href="/medioschile/index">Medios Chile ›</a></li>
+            <li><a href="/medioschile/canaltvlist">Medio Digital ›</a></li>
+            <li class="active">{{ object.medio }}</li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row section-profile-header">
+      <div class="col16">
+        <div class="profile-wrapper">
+            <div class="profile-logo">
+            {% if object.logo %}
+            <p><img src="{{ MEDIA_URL }}{{ object.logo }}" width="110" /></p>
+            {% endif %}
+            </div>
+          <div class="profile-title">
+            <h1>{{ object.medio }}</h1>
+            <span class="badge badge-medio badge-digital">Medio Digital {{ object.frecuencia }}</span>
+          </div>
+          <div class="profile-info">
+            <ul>
+              <li><i class="icon icon-16 flaticon solid compose-1"></i> Información recogida en período 15 Abril 2015 a 18 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon solid repeat-4"></i> Actualizado en 15 Abril 2015</li>
+              <li><i class="icon icon-16 flaticon stroke download-2"></i> Descargar <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></li>
+              <li><i class="icon icon-16 flaticon solid magic-wand-1"></i> <a href="{% url 'medioschile:aporta' %}">Aportar información</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid clipboard-2"></i>
+          </span>
+          <h4>Información General</h4>
+        </div>
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+
+            {% if object.inicioyear %}
+            <tr>
+              <th class="aright">Año fundación:</th>
+              <td class="text text-s">{{ object.inicioyear }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.genero %}
+            <tr>
+              <th class="aright">Género:</th>
+              <td class="text text-s">{{ object.genero }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.direccion %} 
+            <tr>
+              <th class="aright">Dirección:</th>
+              <td class="text text-s">{{ object.direccion }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+    
+            {% if object.sitioweb %}
+            <tr>
+              <th class="aright">Sitio Web:</th>
+              <td class="text text-s"><a href="{{ object.sitioweb }}">{{ object.sitioweb }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.nativoasociado %}
+            <tr>
+              <th class="aright">Nativo Digital o Asociado a Medio:</th>
+              <td class="text text-s">{{ object.nativoasociado }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.pagado_gratuito %}
+            <tr>
+              <th class="aright">Gratuito, Pagado o Mixto:</th>
+              <td class="text text-s">{{ object.pagado_gratuito }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.asociadoaescrito %}
+            <tr>
+              <th class="aright">Relacionado con Diario/Revista:</th>
+              <td class="text text-s"><a href="/medioschile/escritolist/{{ object.asociadoaescrito.id }}">{{ object.asociadoaescrito }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.asociadoaradio %}
+            <tr>
+              <th class="aright">Relacionado con Radio:</th>
+              <td class="text text-s"><a href="/medioschile/radiolist/{{ object.asociadoaradio.id }}">{{ object.asociadoaradio }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.asociadoacanaltv %}
+
+            <tr>
+              <th class="aright">Relacionado con Canal de TV:</th>
+              <td class="text text-s"><a href="/medioschile/canaltvlist/{{ object.asociadoacanaltv.id }}">{{ object.asociadoacanaltv }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.asociadoamediodigital %}
+            <tr>
+              <th class="aright">Relacionado con Medio Digital:</th>
+              <td class="text text-s"><a href="/medioschile/mediodigitallist/{{ object.asociadoamediodigital.id }}">{{ object.asociadoamediodigital }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            <tr>
+              <th class="aright">Cobertura:</th>
+              <td class="text text-s">{{ object.cobertura }}</td>
+            </tr>
+
+            {% if object.region.all %}
+            <tr>
+              <th class="aright">Región(es):</th>
+              <td class="text text-s">
+              {% for regiones in object.region.all %}
+              {{ regiones.region }} · 
+              {% empty %}
+              {% endfor %}
+              </td>
+            </tr>
+            {% else %}
+            {% endif %}
+            
+            {% if object.comuna.all %}
+            <tr>
+              <th class="aright">Comuna{{ object.comuna.all.count|pluralize }}:</th>
+              <td class="text text-s">
+              {% for comunas in object.comuna.all %}
+              {{ comunas.comuna }} · 
+              {% empty %}
+              {% endfor %}
+              </td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.indiceaudiencia %}
+            <tr>
+              <th class="aright">Índice de Audiencia:</th>
+              <td class="text text-s">{{  object.indiceaudiencia }} {{ object.infoaudiencia }}</td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+            {% if object.fuenteaudiencia %}
+            <tr>
+              <th class="aright">Fuente Rating:</th>
+              <td class="text text-s"><a href="{{ object.fuenteaudiencia.pk }}">{{ object.fuenteaudiencia }}</a></td>
+            </tr>
+            {% else %}
+            {% endif %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% if object.ejecutivouno or object.ejecutivodos or object.ejecutivotres %}
+    <div class="row">
+      <div class="col16">
+       <div class="heading heading-s with-icon">
+         <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid user-1"></i>
+         </span>
+        <h4>Principales ejecutivos</h4>
+       </div>
+
+
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+          {% if object.ejecutivouno %}            
+            <tr>
+              <th class="aright">{{ object.ejecutivounocargo }}</th>
+              <td class="text text-s">{{ object.ejecutivouno }}<br>
+              </td>
+            </tr>
+            {% else %}
+            {% endif %}
+          {% if object.ejecutivodos %}
+            <tr>
+              <th class="aright">{{ object.ejecutivodoscargo }}</th>
+              <td class="text text-s">{{ object.ejecutivodos }}<br>
+              </td>
+            </tr>
+            {% else %}
+            {% endif %}
+          {% if object.ejecutivotres %}
+            <tr>
+              <th class="aright">{{ object.ejecutivotrescargo }}</th>
+              <td class="text text-s">{{ object.ejecutivotres }}<br>
+              </td>
+            </tr>
+            {% else %}
+            {% endif %}
+          </tbody>
+      </table>
+
+      </div>
+    </div>
+    {% else %}
+    {% endif %}
+
+
+    <div class="row">
+      <div class="col16">
+        <div class="heading heading-s with-icon">
+          <span class="icon-heading">
+            <i class="icon icon-16 flaticon solid government-1"></i>
+          </span>
+          <h4>Estructura de Propiedad</h4>
+        </div>
+
+        <table class="table table-info table-bordered table-condensed">
+          <tbody>
+
+            <tr>
+              {% for empresa in object.propietario.all %}
+              <th class="aright">Propietario:</th>
+              <td class="text text-s"><a href="/medioschile/propietario/{{ empresa.id }}">{{ empresa }}</a></td>
+              {% empty %}
+              <th class="aright">Propietario:</th>
+              <td class="text text-s">No tenemos esta información, <a href="">sepa porqué y cómo ayudarnos</a></td>
+              {% endfor %}
+            </tr>
+
+            <tr>
+              
+            <th class="aright"></th>
+              
+              <td class="text text-s">
+            <p>
+    {% for controlador in object.propietario.all %}
+        {% if controlador.propietariopropietario %}
+            {{ controlador }} es controlado por: <br>
+             » <a href="/medioschile/propietario/{{ controlador.propietariopropietario.id }}">{{ controlador.propietariopropietario }}</a>{% if controlador.pcentpropietario %} ({{ controlador.pcentpropietario }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.sociedadcontroladora %}
+                <p>La propiedad de {{ controlador.propietariopropietario }} pertenece a: 
+                <br> » {{ controlador.propietariopropietario.sociedadcontroladora }}{% if controlador.propietariopropietario.pcentsociedadcontroladora %} ({{ controlador.propietariopropietario.pcentsociedadcontroladora }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.sociedadcontroladora.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.sociedadcontroladora.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.sociedadcontroladora.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.sociedadcontroladora.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedada %}
+                <br> » {{ controlador.propietariopropietario.otrasociedada }}{% if controlador.propietariopropietario.pcentsociedada %} ({{ controlador.propietariopropietario.pcentsociedada }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedada.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedada.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedada.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedada.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadb %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadb }}{% if controlador.propietariopropietario.pcentsociedadb %} ({{ controlador.propietariopropietario.pcentsociedadb }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadb.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadb.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadb.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadb.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadc %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadc }}{% if controlador.propietariopropietario.pcentsociedadc %} ({{ controlador.propietariopropietario.pcentsociedadc }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadc.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadc.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadc.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadc.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadd %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadd }}{% if controlador.propietariopropietario.pcentsociedadd %} ({{ controlador.propietariopropietario.pcentsociedadd }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadd.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadd.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadd.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadd.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedade %}
+                <br> » {{ controlador.propietariopropietario.otrasociedade }}{% if controlador.propietariopropietario.pcentsociedade %} ({{ controlador.propietariopropietario.pcentsociedade }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedade.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedade.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedade.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedade.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadf %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadf }}{% if controlador.propietariopropietario.pcentsociedadf %} ({{ controlador.propietariopropietario.pcentsociedadf }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadf.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadf.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadf.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadf.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadg %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadg }}{% if controlador.propietariopropietario.pcentsociedadg %} ({{ controlador.propietariopropietario.pcentsociedadg }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadg.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadg.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadg.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadg.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadh %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadh }}{% if controlador.propietariopropietario.pcentsociedadh %} ({{ controlador.propietariopropietario.pcentsociedadh }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadh.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadh.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadh.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadh.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadi %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadi }}{% if controlador.propietariopropietario.pcentsociedadi %} ({{ controlador.propietariopropietario.pcentsociedadi }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadi.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadi.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadi.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadi.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadj %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadj }}{% if controlador.propietariopropietario.pcentsociedadj %} ({{ controlador.propietariopropietario.pcentsociedadj }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadj.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadj.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadj.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadj.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadk %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadk }}{% if controlador.propietariopropietario.pcentsociedadk %} ({{ controlador.propietariopropietario.pcentsociedadk }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadk.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadk.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadk.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadk.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadl %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadl }}{% if controlador.propietariopropietario.pcentsociedadl %} ({{ controlador.propietariopropietario.pcentsociedadl }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadl.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadl.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadl.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadl.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadm %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadm }}{% if controlador.propietariopropietario.pcentsociedadm %} ({{ controlador.propietariopropietario.pcentsociedadm }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadm.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadm.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadm.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadm.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+
+                {% if controlador.propietariopropietario.otrasociedadn %}
+                <br> » {{ controlador.propietariopropietario.otrasociedadn }}{% if controlador.propietariopropietario.pcentsociedadn %} ({{ controlador.propietariopropietario.pcentsociedadn }} %){% else %}{% endif %}<br>
+                {% if controlador.propietariopropietario.otrasociedadn.controlador %}
+                &nbsp;&nbsp;&nbsp; ↑ perteneciente a {{ controlador.propietariopropietario.otrasociedadn.controlador }}
+                {% else %}
+                {% endif %}
+                {% if controlador.propietariopropietario.otrasociedadn.controlador.controlador %}
+                 de {{ controlador.propietariopropietario.otrasociedadn.controlador.controlador }}
+                {% else %}
+                {% endif %}
+                {% else %}
+                {% endif %}
+ 
+        {% else %}
+        <p></p>
+        {% endif %}
+    {% endfor %}
+    </p>
+        </td>
+        </tr>
+
+    {% for dueño in object.propietario.all %}
+        {% if dueño.sociedadcontroladora %}
+            <tr>
+              <th class="aright">Socios:</th>
+              <td class="text text-s">
+        <p>
+            {{ dueño.propietario }} es propiedad de: 
+            <br> » {{ dueño.sociedadcontroladora }}{% if dueño.pcentsociedadcontroladora %} ({{ dueño.pcentsociedadcontroladora }} %){% else %}{% endif %}
+            {% if dueño.sociedadcontroladora.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.sociedadcontroladora.controlador }}
+            {% else %}
+            {% endif %}
+             {% if dueño.sociedadcontroladora.controlador.controlador %} 
+             de {{ dueño.sociedadcontroladora.controlador.controlador }}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedada %}
+            <br> » {{ dueño.otrasociedada }}{% if dueño.pcentsociedada %} ({{ dueño.pcentsociedada }} %){% else %}{% endif %}
+            {% if dueño.otrasociedada.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedada.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedada.controlador.controlador %} 
+            de {{ dueño.otrasociedada.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadb %}
+            <br> » {{ dueño.otrasociedadb }}{% if dueño.pcentsociedadb %} ({{ dueño.pcentsociedadb }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadb.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadb.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadb.controlador.controlador %} 
+            de {{ dueño.otrasociedadb.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadc %}
+            <br> » {{ dueño.otrasociedadc }}{% if dueño.pcentsociedadc %} ({{ dueño.pcentsociedadc }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadc.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadc.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadc.controlador.controlador %} 
+            de {{ dueño.otrasociedadc.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadd %}
+            <br> » {{ dueño.otrasociedadd }}{% if dueño.pcentsociedadd %} ({{ dueño.pcentsociedadd }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadd.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadd.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadd.controlador.controlador %} 
+            de {{ dueño.otrasociedadd.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedade %}
+            <br> » {{ dueño.otrasociedade }}{% if dueño.pcentsociedade %} ({{ dueño.pcentsociedade }} %){% else %}{% endif %}
+            {% if dueño.otrasociedade.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedade.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedade.controlador.controlador %} 
+            de {{ dueño.otrasociedade.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadf %}
+            <br> » {{ dueño.otrasociedadf }}{% if dueño.pcentsociedadf %} ({{ dueño.pcentsociedadf }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadf.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadf.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadf.controlador.controlador %} 
+            de {{ dueño.otrasociedadf.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadg %}
+            <br> » {{ dueño.otrasociedadg }}{% if dueño.pcentsociedadg %} ({{ dueño.pcentsociedadg }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadg.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadg.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadg.controlador.controlador %} 
+            de {{ dueño.otrasociedadg.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadh %}
+            <br> » {{ dueño.otrasociedadh }}{% if dueño.pcentsociedadh %} ({{ dueño.pcentsociedadh }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadh.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadh.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadh.controlador.controlador %} 
+            de {{ dueño.otrasociedadh.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadi %}
+            <br> » {{ dueño.otrasociedadi }}{% if dueño.pcentsociedadi %} ({{ dueño.pcentsociedadi }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadi.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadi.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadi.controlador.controlador %} 
+            de {{ dueño.otrasociedadi.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadj %}
+            <br> » {{ dueño.otrasociedadj }}{% if dueño.pcentsociedadj %} ({{ dueño.pcentsociedadj }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadj.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadj.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadj.controlador.controlador %} 
+            de {{ dueño.otrasociedadj.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadk %}
+            <br> » {{ dueño.otrasociedadk }}{% if dueño.pcentsociedadk %} ({{ dueño.pcentsociedadk }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadk.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadk.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadk.controlador.controlador %} 
+            de {{ dueño.otrasociedadk.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadl %}
+            <br> » {{ dueño.otrasociedadl }}{% if dueño.pcentsociedadl %} ({{ dueño.pcentsociedadl }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadl.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadl.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadl.controlador.controlador %} 
+            de {{ dueño.otrasociedadl.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadm %}
+            <br> » {{ dueño.otrasociedadm }}{% if dueño.pcentsociedadm %} ({{ dueño.pcentsociedadm }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadm.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadm.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadm.controlador.controlador %} 
+            de {{ dueño.otrasociedadm.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+            {% if dueño.otrasociedadn %}
+            <br> » {{ dueño.otrasociedadn }}{% if dueño.pcentsociedadn %} ({{ dueño.pcentsociedadn }} %){% else %}{% endif %}
+            {% if dueño.otrasociedadn.controlador %} 
+            <br>&nbsp;&nbsp;&nbsp;↑ perteneciente a {{ dueño.otrasociedadn.controlador }}
+            {% else %}
+            {% endif %}
+            {% if dueño.otrasociedadn.controlador.controlador %} 
+            de {{ dueño.otrasociedadn.controlador.controlador }}
+            {% else %}
+            {% endif %}
+            {% else %}
+            {% endif %}
+
+        </p>
+            </td>
+            </tr>
+        {% else %}    
+        {% endif %}
+    {% endfor %}
+
+
+    {% if object.fuentepropiedad %}
+    <tr>
+              <th class="aright">Fuente datos de propiedad:</th>
+              <td class="text text-s"><a href="{{ object.fuentepropiedad.linkfuente }}">{{ object.fuentepropiedad | truncatechars:100 }}</a></td>
+    </tr>
+    {% else %}    
+    {% endif %}
+
+    {% if object.grupo %}
+        <tr>
+            <th class="aright">Grupo de Medios:</th>
+            <td class="text text-s">{{ object.medio }} es parte de {{ object.grupo }}
+            </td>
+        </tr>
+        {% if object.grupo.controladorgrupo %}
+        <tr>  
+            <th class="aright">Controlado por:</th>
+            <td class="text text-s">{{ object.grupo.controladorgrupo }}
+            {% if object.grupo.linkgrupo %}
+            <a href="{{ object.grupo.linkgrupo }}"> Ver Perfil en Poderopedia</a>
+            {% else %}{% endif %}</td>
+        </tr>
+        {% if object.grupo.otrosnegociosgrupo.all %}
+        <tr>
+            <th class="aright">Intereses del controlador en otros sectores:</th>
+            <td class="text text-s">
+            {% for sectores in object.grupo.otrosnegociosgrupo.all %}
+            {{ sectores.sector }} · 
+            {% empty %}
+            {% endfor %}
+            </td>
+        </tr>
+        {% else %}
+        {% endif %}
+        {% else %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+
+    </tbody>
+    </table>
+    </div>
+  </div>
+
+
+{% if object.grupo %}
+<div class="row">
+        <div class="col16">
+          <div class="heading heading-s with-icon">
+            <span class="icon-heading">
+              <i class="icon icon-16 flaticon solid clipboard-2"></i>
+            </span>
+            <h4>Medios Relacionados</h4>
+          </div>
+<div class="btn-group">
+  <ul>
+  {% if object.grupo.canaltvsgrupo %}
+      {% for otrocanaltv in object.grupo.canaltvsgrupo.all %}
+        <li><a href="/medioschile/canaltvlist/{{ otrocanaltv.id }}" class="btn btn-medio btn-tv"><i class="icon icon-16 flaticon solid tv-1"></i>{{ otrocanaltv }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.grupo.escritosgrupo %}
+      {% for otroescrito in object.grupo.escritosgrupo.all %}
+        <li><a href="/medioschile/escritolist/{{ otroescrito.id }}" class="btn btn-medio btn-magazine"><i class="icon icon-16 flaticon solid open-book-3"></i>{{ otroescrito }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.grupo.radiosgrupo %}
+      {% for otroradio in object.grupo.radiosgrupo.all %}
+        <li><a href="/medioschile/radiolist/{{ otroradio.id }}" class="btn btn-medio btn-radio"><i class="icon icon-16 flaticon solid microphone-1"></i>{{ otroradio }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+  {% if object.grupo.digitalesgrupo %}
+      {% for otromediodigital in object.grupo.digitalesgrupo.all %}
+        <li><a href="/medioschile/mediodigitallist/{{ otromediodigital.id }}" class="btn btn-medio btn-digital"><i class="icon icon-16 flaticon solid macbook-1"></i>{{ otromediodigital }}</a></li>
+        {% empty %}
+        {% endfor %}
+  {% else %}
+  {% endif %}
+    </ul>
+    </div>
+
+  </div>
+</div>
+{% else %}
+{% endif %}
+
+</section>    
+  
+{% endblock %}

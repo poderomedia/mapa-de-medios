@@ -1,0 +1,18 @@
+.link-primary,
+.link-secondary,
+.link-tertiary {
+	@include transition(color $transition);
+}
+
+.link-primary {
+	color: $color-secondary;
+	&:hover {
+		color: $color-title;
+	}
+}
+.link-tertiary {
+	color: $color-title;
+	&:hover {
+		color: $color-base;
+	}
+}

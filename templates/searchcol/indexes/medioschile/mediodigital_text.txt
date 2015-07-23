@@ -1,0 +1,7 @@
+{{ object.medio }}
+{{ object.asociadoaescrito }}
+{{ object.asociadoaradio }}
+{{ object.asociadoacanaltv }}
+{{ object.asociadoamediodigital }}
+{{ object.grupo }}
+{{ object.propietario }}

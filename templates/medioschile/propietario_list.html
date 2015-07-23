@@ -1,0 +1,55 @@
+{% extends "medioschile/base.html" %}
+{% block content %}
+<section class="section-title row-module row-module-s-bottom">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Propietarios de Medios</h1>
+          <h2>Tenemos registrados {{ propietario_list.count }} propietarios de medios de comunicación. Conoce la <a href="/medioschile/metodologia">metodología</a> usada para esta investigación y <a href="/medioschile/datos">descarga los datos</a>.</h2>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="row-module row-module-s-top">
+    <div class="row">
+      <div class="col16">
+
+        <!-- <div class="pager-info">
+          <span class="right">Descargar: <a href="#">CSV</a>, <a href="#">XLS</a>, <a href="#">JSON</a></span>
+        </div> -->
+
+<table id="TablaLista" class="display" width="100%" cellspacing="0">
+
+    <thead>
+    <tr>
+    <th width="30%" align="left">Nombre</th>
+    <th width="20%" align="left">Tipo de Entidad</th>
+    <th width="30%" align="left">Presidente Directorio</th>
+    <th width="20%" align="left">Controlador</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for propietario in propietario_list %}
+        <tr>
+        <td><a href="{{ propietario.pk }}" title="Ver detalle de {{ propietario.propietario }}">{{ propietario.propietario | default:"No hay información" }}</a></td>
+        <td>{{ propietario.tiposociedad | default:"No hay información" }}</td>
+        <td>{{ propietario.presidentedirectorio | default:"No hay información" }}</td>
+        <td>{% if propietario.sociedadcontroladora or propietario.propietariopropietario %}{% if propietario.sociedadcontroladora %}{{ propietario.sociedadcontroladora }}{% else %}{% endif %}{% if propietario.propietariopropietario %}{{ propietario.propietariopropietario }}{% else %}{% endif %}{% else %}No hay información{% endif %}
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+    </tfoot>
+    </table>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

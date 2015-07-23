@@ -1,0 +1,235 @@
+{% extends "medioschile/base.html" %}
+{% load medioschile_extras %}
+{% load medioscolombia_extras %}
+{% block content %}
+<section class="section-featured row-module">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h1>Descubre quién es quién en la Industria de medios de Chile y Colombia.</h1>
+          <p>El Mapa de Medios es una base de datos de Medios de Comunicación de <a href=".">Chile</a> y <a href="{% url 'medioscolombia:index' %}">Colombia</a>, y quiénes son los propietarios de esos Medios. Incluye la mayor parte de los Medios Impresos, Digitales, Radiales y Televisivos de cada país un registro de cuáles son las leyes relativas a Medios y el ejercicio del Periodismo; y las fuentes de información consultadas para realizar esta investigación. Conoce el analisis, descarga los <a href="{% url 'medioschile:datos' %}">Datos</a>, usa la <a href="{% url 'api' %}">API</a>, revisa la <a href="{% url 'medioschile:metodologia' %}">Metodología</a> y reutiliza el <a href="{% url 'medioschile:codigo' %}">Código</a> de esta aplicación.</p>
+        </div>
+      </div>
+      <div class="col12 prefix2">
+    <form class="form-search" action="/search" method="GET">
+            <div class="search-group">
+              <div class="search-form">
+                <i class="icon icon-16 flaticon stroke zoom-2"></i>
+                <input type="text" name="q" placeholder="Buscar por el nombre del medio, propietario o grupo de medios" />
+              </div>
+              <div class="search-submit">
+                <input type="submit" class="btn btn-m btn-primary" value="Buscar" />
+              </div>
+            </div>
+            <!-- <div class="form-search-options">
+              <label class="radio"><input type="radio" name="checkpais" value="cl" checked="checked"> Chile</label>
+              <label class="radio"><input type="radio" name="checkpais" value="col"> Colombia</label>
+              <p><i class="icon icon-16 flaticon solid question-2"></i> Selecciona el País donde quieres buscar.</p>
+            </div> -->
+    </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-articles row-module">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h3>Análisis</h3>
+        </div>
+      </div>
+
+      <div id="slide-articles" class="carousel" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner" role="listbox">
+          <div class="item active">
+            <article class="col8">
+            {% for articulo in articulos %}
+            {% if articulo.posicion == "1" %}
+              <a href="{% url 'medioschile:analisisdetail' articulo.pk %}">
+                <h3>{{ articulo.titulo }}</h3>
+                <figure>
+                  <img src="{{ MEDIA_URL }}{{ articulo.imagen_destacada }}" />
+                </figure>
+                <span class="btn btn-s btn-default">
+                  <i class="icon icon-16 flaticon stroke activity-1"></i> Leer
+                </span>
+              </a>
+            {% endif %}
+            {% endfor %}
+            </article>
+           
+            <article class="col8">
+            {% for articulo in articulos %}
+            {% if articulo.posicion == "2" %}
+              <a href="{% url 'medioschile:analisisdetail' articulo.pk %}">
+                <h3>{{ articulo.titulo }}</h3>
+                <figure>
+                  <img src="{{ MEDIA_URL }}{{ articulo.imagen_destacada }}" />
+                </figure>
+                <span class="btn btn-s btn-default">
+                  <i class="icon icon-16 flaticon stroke activity-1"></i> Leer
+                </span>
+              </a>
+            {% endif %}
+            {% endfor %}
+            </article>
+          </div><!--/item-->
+
+          <div class="item">
+            <article class="col8">
+            {% for articulo in articulos %}
+            {% if articulo.posicion == "3" %}
+              <a href="{% url 'medioschile:analisisdetail' articulo.pk %}">
+                <h3>{{ articulo.titulo }}</h3>
+                <figure>
+                  <img src="{{ MEDIA_URL }}{{ articulo.imagen_destacada }}" />
+                </figure>
+                <span class="btn btn-s btn-default">
+                  <i class="icon icon-16 flaticon stroke activity-1"></i> Leer
+                </span>
+              </a>
+            {% endif %}
+            {% endfor %}
+            </article>
+
+            <article class="col8">
+            {% for articulo in articulos %}
+            {% if articulo.posicion == "4" %}
+              <a href="{% url 'medioschile:analisisdetail' articulo.pk %}">
+                <h3>{{ articulo.titulo }}</h3>
+                <figure>
+                  <img src="{{ MEDIA_URL }}{{ articulo.imagen_destacada }}" />
+                </figure>
+                <span class="btn btn-s btn-default">
+                  <i class="icon icon-16 flaticon stroke activity-1"></i> Leer
+                </span>
+              </a>
+            {% endif %}
+            {% endfor %}
+            </article>
+          </div><!--/item-->
+        </div>
+
+        <a href="#slide-articles" class="ctrl prev" data-slide="prev">Previous</a>
+        <a href="#slide-articles" class="ctrl next" data-slide="next">Next</a>
+
+        <ol class="carousel-indicators">
+          <li data-target="#slide-articles" data-slide-to="0" class="active">1</li>
+          <li data-target="#slide-articles" data-slide-to="1">2</li>
+        </ol>
+
+      </div><!--/slide articles-->
+
+    </div>
+  </section>
+
+  <section class="section-categories row-module"><a name="categorias"></a>
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h3>Descubre información por categorías</h3>
+        </div>
+      </div>
+      <div class="col7">
+        <h6><i class="icon icon-16 flaticon solid tag-1"></i> Medios de Chile</h6>
+        <nav>
+          <ul>
+            <li><a href="{% url 'medioschile:digitaleslist' %}"><span>{% contardigitales %}</span>Medios Digitales</a></li>
+            <li><a href="{% url 'medioschile:escritoslist' %}"><span>{% contarescritos %}</span>Impresos</a></li>
+            <li><a href="{% url 'medioschile:canalestvlist' %}"><span>{% contarcanalestv %}</span>Televisión</a></li>
+            <li><a href="{% url 'medioschile:radioslist' %}"><span>{% contarradios %}</span>Radio</a></li>
+            <li><a href="{% url 'medioschile:gruposlist' %}"><span>{% contargrupos %}</span>Grupos de Medios</a></li>
+            <li><a href="{% url 'medioschile:propietarioslist' %}"><span>{% contarpropietarios %}</span>Propietarios</a></li>
+            <li><a href="{% url 'medioschile:regulacioneslist' %}"><span>{% contarleyes %}</span>Legislación</a></li>
+            <li><a href="{% url 'medioschile:fuenteslist' %}"><span>{% contarfuentes %}</span>Fuentes Utilizadas</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col7 prefix2">
+        <h6><i class="icon icon-16 flaticon solid tag-1"></i> Medios de Colombia</h6>
+        <nav>
+          <ul>
+            <li><a href="{% url 'medioscolombia:digitaleslist' %}"><span>{% contardigitalescol %}</span>Medios Digitales</a></li>
+            <li><a href="{% url 'medioscolombia:escritoslist' %}"><span>{% contarescritoscol %}</span>Impresos</a></li>
+            <li><a href="{% url 'medioscolombia:canalestvlist' %}"><span>{% contarcanalestvcol %}</span>Televisión</a></li>
+            <li><a href="{% url 'medioscolombia:radioslist' %}"><span>{% contarradioscol %}</span>Radio</a></li>
+            <li><a href="{% url 'medioscolombia:gruposlist' %}"><span>{% contargruposcol %}</span>Grupos de Medios</a></li>
+            <li><a href="{% url 'medioscolombia:propietarioslist' %}"><span>{% contarpropietarioscol %}</span>Propietarios</a></li>
+            <li><a href="{% url 'medioscolombia:regulacioneslist' %}"><span>{% contarleyescol %}</span>Legislación</a></li>
+            <li><a href="{% url 'medioscolombia:fuenteslist' %}"><span>{% contarfuentescol %}</span>Fuentes Utilizadas</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <section class="row-module">
+    <div class="row">
+      <div class="col16">
+        <div class="heading acenter">
+          <h3>Conoce la metodología y <br/> reusa la información en tu proyecto</h3>
+        </div>
+
+        <div class="item-featured-list">
+          <div class="item-featured">
+            <a href="{% url 'medioschile:acercade' %}">
+              <span>
+                <i class="icon icon-32 flaticon solid open-book-1"></i>
+              </span>
+              <h6>Qué es el Mapa de Medios</h6>
+              <p>El Mapa de Medios de Chile y Colombia es una base de datos sobre la industria de medios en estos países, sus dueños, actores que inciden en las políticas públicas y la legislación sobre los medios de comunicación.</p>
+            </a>
+          </div>
+          <div class="item-featured">
+            <a href="{% url 'medioschile:metodologia' %}">
+              <span>
+                <i class="icon icon-32 flaticon solid magic-wand-1"></i>
+              </span>
+              <h6>Cómo de hizo</h6>
+              <p>Mapa de Medios de Chile y Colombia es el resultado de una investigación periodística, dos hackdays realizados en cada país donde se asistieron académicos, expertos, periodistas, diseñadores y programadores, quienes colaboraron en la construcción de una base de datos.</p>
+            </a>
+          </div>
+          <div class="item-featured">
+            <a href="{% url 'medioschile:datos' %}">
+              <span>
+                <i class="icon icon-32 flaticon solid download-1"></i>
+              </span>
+              <h6>Descarga los datos</h6>
+              <p>Los datos recopilados en Mapa de Medios están disponibles para la comunidad (ciudadanos, estudiantes, investigadores, etc.) bajo una estructura de Open Data.</p>
+            </a>
+          </div>
+          <div class="item-featured">
+            <a href="{% url 'medioschile:codigo' %}">
+              <span>
+                <i class="icon icon-32 flaticon social github-1"></i>
+              </span>
+              <h6>Código abierto para tu proyecto</h6>
+              <p>Este proyecto está construido sobre la aplicación de ingreso y publicación de datos de código abierto MediaMapper. Revisa cómo puedes crear tu propio proyecto sobre Medios.</p>
+            </a>
+          </div>
+          <div class="item-featured">
+            <a href="{% url 'api' %}">
+              <span>
+                <i class="icon icon-32 flaticon solid settings-2"></i>
+              </span>
+              <h6>Tenemos API</h6>
+              <p>Si necesitas reutilizar nuestros datos en tiempo real, para tus aplicaciones o sitios web, tenemos API disponible. Puedes integrar Mapa de Medios a tus proyectos y te podemos ayudar si lo requieres.</p>
+            </a>
+          </div>
+          <div class="item-featured">
+            <a href="{% url 'medioschile:aporta' %}">
+              <span>
+                <i class="icon icon-32 flaticon solid mail-3"></i>
+              </span>
+              <h6>Agrega nueva información de Medios</h6>
+              <p>Mapa de Medios permite a los usuarios aportar contenido a sus bases de datos a fin de incrementar la información y actualizaciones relativas a la propiedad de los medios de comunicación en Chile y Colombia.</p>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+

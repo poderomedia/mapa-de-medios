@@ -1,0 +1,151 @@
+.text {
+	font-size: em(16px);
+	* {
+		line-height: 1.5em;
+	}
+	p, figure, ol, ul, blockquote, video, embed, iframe {
+		margin: 0 0 20px 0;
+		@include breakpoint($max, $m-screen) {
+			margin: 0 0 10px 0;
+		}
+	}
+	a {
+		@extend .link-primary;
+	}
+	ul, ol {
+		margin-left: 40px;
+		@include breakpoint($max, $m-screen) {
+			margin-left: 20px;
+		}
+		&:last-child {
+			margin-bottom: 0;
+		}
+		li {
+			margin: 0 0 2px;
+			&:last-child {
+				margin: 0;
+			}
+		}
+		ol, ul {
+			margin-bottom: 0;
+		}
+	}
+	ul li {
+		list-style-type: disc;
+	}
+	ol li {
+		list-style-type: decimal;
+		ol li {
+			list-style-type: lower-alpha;
+		}
+		ul li {
+			list-style-type: disc;
+		}
+	}
+	&.text-s {
+		font-size: em($font-size-base);
+	}
+
+
+	.highlight {
+		padding: 10px;
+		@include prefix(border-radius, 2px);
+		background: $color-bg-light;
+		border: 1px solid $color-border-light;
+		pre, code {
+			background: none;
+			font-family: monospace;
+			font-size: 13px;
+			white-space: pre;
+		}
+	}
+
+
+
+
+
+	blockquote {
+		color: $color-title;
+		font-size: em(20px);
+		@include breakpoint($max, $m-screen) {
+			font-size: em(16px);
+		}
+	}
+
+	figure {
+		img {
+			display: block;
+			position: relative;
+			max-width: 100%;
+			height: auto;
+		}
+		figcaption {
+			position: relative;
+			font-size: em(13px, 16px);
+			display: block;
+			padding: 10px 30px 0;
+			@include breakpoint($max, $m-screen) {
+				padding: 10px 10px 0;
+			}
+			p {
+				margin: 0;
+			}
+			&:after {
+				content: "";
+				width: 30px;
+				height: 2px;
+				background: $color-info;
+				@include position(absolute, -2px 0 0 0px);
+				@include breakpoint($max, $m-screen) {
+					width: 20px;
+				}
+				@include breakpoint($max, $s-screen) {
+					width: 10px;
+				}
+			}
+		}
+	}
+
+
+	h2, h3, h4, h5, h6 {
+		color: $color-title;
+		margin: 40px 0 10px;
+		@include breakpoint($max, $s-screen) {
+			margin: 20px 0 10px;
+		}
+	}
+	h2 {
+		font-size: em(24px);
+		line-height: 1.3em;
+		@include breakpoint($max, $m-screen) {
+			font-size: em(20px);
+		}
+		@include breakpoint($max, $s-screen) {
+			font-size: em(18px);
+		}
+	}
+	h3 {
+		font-size: em(20px);
+		line-height: 1.3em;
+		@include breakpoint($max, $m-screen) {
+			font-size: em(18px);
+		}
+		@include breakpoint($max, $s-screen) {
+			font-size: em(16px);
+		}
+	}
+	h4, h5, h6 {
+		font-size: em(18px);
+		line-height: 1.5em;
+		@include breakpoint($max, $m-screen) {
+			font-size: em(16px);
+		}
+	}
+
+
+
+
+
+
+
+}

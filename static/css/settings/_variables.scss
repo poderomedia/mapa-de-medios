@@ -1,0 +1,50 @@
+// basic
+
+$font-size-base: 13px; 
+$font-family-primary: gotham, Arial, sans-serif;
+$font-family-secondary: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+// grid
+
+$grid-columns: 16;  // number of columns
+$grid-width: 960px; // width grid
+$grid-gutter-width: 20px; // width inter columns
+
+// media queries
+
+$xs-screen: 480px; // Extra small screen / phone
+$s-screen: 768px; // Small screen / tablet
+$m-screen: 992px; // Medium screen / desktop
+$l-screen: $grid-width; // Large screen / wide desktop
+$xl-screen: $grid-width + 140px; // Large screen / wide desktop
+
+// transition default
+
+$transition: .2s linear;
+
+
+$color-base: #808284;
+$color-secondary: #008ccc;
+$color-tertiary: #1a1a1b;
+
+$color-title: $color-tertiary;
+$color-border-light: #ededed;
+$color-bg-light: #f7f7f7;
+$color-input-border: #dcdcdc;
+
+$color-label: darken(#b6b9bb, 10%);
+
+$color-default: $color-bg-light;
+$color-primary: #f54212; /* orange corporate */
+$color-success: green; /* green */
+$color-info: #008ccc; /* blue corporate */
+$color-warning: #FFC100; /* yellow */
+$color-danger: red; /* red */
+
+$color-medio-tv: #00E1A8;
+$color-medio-magazine: $color-warning;
+$color-medio-radio: #7F64B5;
+$color-medio-digital: #FF6A8F;
+
+
+

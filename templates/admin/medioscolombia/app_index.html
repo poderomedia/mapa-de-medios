@@ -1,0 +1,81 @@
+{% extends "admin/index.html" %}
+{% load i18n grp_tags %}
+
+{% block javascripts %}
+    {{ block.super }}
+{% endblock %}
+
+{% if not is_popup %}
+    {% block breadcrumbs %}
+        <ul class="grp-horizontal-list">
+            <li><a href="{% url 'admin:index' %}">{% trans "Inicio" %}</a></li>
+            {% for app in app_list %}
+                {% blocktrans with app.name as name %}<li>{{ name }}</li>{% endblocktrans %}
+            {% endfor %}
+        </ul>
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<!-- BOTONES MEDIOSCOLOMBIA -->
+<br>
+<br>
+
+<table>
+<thead>
+<tr>
+<th><h2>Prensa Escrita</h2></th>
+<th><h2>Canales de TV</h2></th>
+<th><h2>Radios</h2></th>
+<th><h2>Medios Digitales</h2></th>
+<th><h2>Fuentes</h2></th>
+<th><h2>Regulaciones</h2></th>
+</tr>
+</thead>
+<tbody>
+<tr class="grp-row-even">
+<td><a href="/admin/medioscolombia/escrito/add/" class="grp-button grp-default">{% trans "Añadir Medio Escrito" %}</a></td>
+<td><a href="/admin/medioscolombia/canaltv/add/" class="grp-button grp-default">{% trans "Añadir Canal TV" %}</a></td>
+<td><a href="/admin/medioscolombia/radio/add/" class="grp-button grp-default">{% trans "Añadir Radio" %}</a></td>
+<td><a href="/admin/medioscolombia/mediodigital/add/" class="grp-button grp-default">{% trans "Añadir Medio Digital" %}</a></td>
+<td><a href="/admin/medioscolombia/fuente/add" class="grp-button grp-default">{% trans "Añadir Fuentes" %}</a></td>
+<td><a href="/admin/medioscolombia/regulacion/add" class="grp-button grp-default">{% trans "Añadir Regulaciones" %}</a></td>
+</tr>
+<tr class="grp-row-even">
+<td><a href="/admin/medioscolombia/escrito/" class="grp-button grp-default">{% trans "Lista Medios Escritos" %}</a></td>
+<td><a href="/admin/medioscolombia/canaltv/" class="grp-button grp-default">{% trans "Lista Canales TV" %}</a></td>
+<td><a href="/admin/medioscolombia/radio/" class="grp-button grp-default">{% trans "Lista Radios" %}</a></td>
+<td><a href="/admin/medioscolombia/mediodigital/" class="grp-button grp-default">{% trans "Lista Medios Digitales" %}</a></td>
+<td><a href="/admin/medioscolombia/fuente/" class="grp-button grp-default">{% trans "Lista Fuentes" %}</a></td>
+<td><a href="/admin/medioscolombia/regulacion/" class="grp-button grp-default">{% trans "Lista Regulaciones" %}</a></td>
+</tr>
+</tbody>
+</table>
+
+<br>
+<br>
+
+   <div class="g-d-c">
+        <div class="g-d-12" id="apps_init">
+            {% for app in app_list %}
+                <div class="grp-module" id="app_{{ app.name|lower }}">
+                    <h2>{% trans "Todos los Mantenedores" %}</h2>
+                    {% for model in app.models %}
+                        <div class="grp-row">
+                            {% if model.perms.change %}<a href="{{ model.admin_url }}"><strong>{{ model.name }}</strong></a>{% else %}<span><strong>{{ model.name }}</strong></span>{% endif %}
+                            {% if model.perms.add or model.perms.change %}
+                                <ul class="grp-actions">
+                                    {% if model.perms.add %}<li class="grp-add-link"><a href="{{ model.add_url }}">{% trans 'Añadir' %}</a></li>{% endif %}
+                                    {% if model.perms.change %}<li class="grp-change-link"><a href="{{ model.admin_url }}">{% trans 'Editar' %}</a></li>{% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% empty %}
+                <p>{% trans "You don´t have permission to edit anything." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
