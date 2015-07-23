@@ -1,0 +1,139 @@
+.dataTables_wrapper {
+
+	> div {
+		position: relative;
+		@include clearfix;
+		padding-top: 50px;
+		@include breakpoint($max, $m-screen) {
+			padding-top: 40px;
+		}
+	}
+	.DTTT_container,
+	.dataTables_info {
+		width: 50%;
+		float: right;
+		@include clearfix;
+		padding: 20px 0;
+	}
+	.DTTT_container {
+		a {
+			float: right;
+			margin: 0 0 0 10px;
+			cursor: pointer;
+			@extend .link-primary;
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+	}
+	.dataTables_info {}
+
+	.dataTables_filter {
+		clear: both;
+		@include position(absolute, 0px 0px 0 0px);
+		height: 50px;
+		@include placeholder($color-info);
+		label {
+			display: block;
+		}
+		input {
+			position: relative;
+			width: 100%;
+			height: 50px;
+			z-index: 0;
+			padding: 0 20px;
+			border: 1px solid $color-input-border;
+			@include prefix(box-shadow, inset rgba(black, .05) 0 1px 2px);
+			font-size: em(16px);
+		}
+		@include breakpoint($max, $m-screen) {
+			height: 40px;
+			input {
+				height: 40px;
+				font-size: em(14px);
+				padding: 0 10px;
+			}
+			i {
+				left: 15px;
+			}
+		}
+	}
+
+	.dataTable {
+		@extend .table;
+		border: 1px solid $color-border-light;
+		thead {
+			tr {
+				td, th {
+					&.sorting,
+					&.sorting_asc,
+					&.sorting_desc {
+						position: relative;
+						cursor: pointer;
+						outline: none;
+						&:after {
+							@include icon-config;
+							position: relative !important;
+							font-family: 'Flaticons Stroke';
+							color: $color-info;
+							width: 12px !important;
+							height: 12px !important;
+							display: inline-block;
+							margin: 0 0 0 5px;
+							font-size: 12px;
+							vertical-align: middle;
+						}
+					}
+					&.sorting {
+						&:after {
+							content: "\e5a1";
+						}
+					}
+					&.sorting_asc {
+						background: darken($color-bg-light, 4%);
+						&:after {
+							content: "\e5a8";
+						}
+					}
+					&.sorting_desc {
+						background: darken($color-bg-light, 4%);
+						&:after {
+							content: "\e5a9";
+						}
+					}
+				}
+			}
+		}
+		tbody {
+			a {
+				@extend .link-primary;
+			}
+			tr {
+				td, th {
+					vertical-align: middle;
+					&.sorting_1 {
+						@include breakpoint($min, $table-break) {
+							background: darken($color-bg-light, 1%) !important;
+						}
+					}
+				}
+				&.even {
+					td, th {
+						background: $color-bg-light;
+						&.sorting_1 {
+							@include breakpoint($min, $table-break) {
+								background: darken($color-bg-light, 4%) !important;
+							}
+						}
+					}
+				}
+				&:hover {
+					td, th {
+						@include breakpoint($min, $table-break) {
+							background: lighten($color-bg-light, 1%);
+						}	
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,3 @@
+@function em($fontsize, $bodysize: $font-size-base) {
+  @return ($fontsize / $bodysize) * 1em;
+}

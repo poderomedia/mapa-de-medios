@@ -1,0 +1,3 @@
+@mixin transition($property...) {
+  @include prefix(transition, $property);
+}

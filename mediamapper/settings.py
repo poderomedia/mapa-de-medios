@@ -142,7 +142,7 @@ STATIC_ROOT = BASE_DIR + '/static/'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    BASE_DIR + "/static/medioschile/",
+    BASE_DIR + "/assets/medioschile/",
 )
 
 ENV_PATH = os.path.abspath(os.path.dirname(__file__))

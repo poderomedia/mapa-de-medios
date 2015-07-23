@@ -1,0 +1,114 @@
+.section-article {
+
+
+	aside.col3 {
+		@include breakpoint($max, $s-screen) {
+			display: none;
+		}
+	}
+
+	.col12.prefix1 {
+		@include breakpoint($max, $s-screen) {
+			width: column-flex(16);
+			margin: 0;
+		}
+	}
+
+	.col12.prefix2 {
+		width: column(12) + 20px;
+		margin: 0 auto;
+		float: none;
+		@include breakpoint($max, ((column(12) + 20px) + 100px)) {
+			width: 100%;
+		}
+	}
+
+
+
+
+	&.list {
+		.post {
+			padding: 0 0 80px;
+			@include breakpoint($max, $m-screen) {
+				padding: 0 0 60px;
+			}
+			@include breakpoint($max, $s-screen) {
+				padding: 0 0 40px;
+			}
+			@include breakpoint($max, $xs-screen) {
+				padding: 0 0 20px;
+			}
+			&:last-child {
+				padding: 0;
+			}
+			.post-title {
+				margin: 0 0 20px;
+				.post-metadatos {
+					margin-top: 10px;
+					@include breakpoint($max, $s-screen) {
+						margin-top: 5px;
+					}
+				}
+			}
+		}
+	}
+}
+.post {
+	.post-title {
+		margin: 0 0 60px;
+		@include breakpoint($max, $m-screen) {
+			margin: 0 0 40px;
+		}
+		@include breakpoint($max, $s-screen) {
+			margin: 0 0 20px;
+		}
+
+
+		@extend .heading;
+
+		h3 {
+			letter-spacing: initial !important;
+			text-transform: initial !important;
+			a {
+				@extend .link-tertiary;
+			}
+		}
+
+		.post-metadatos {
+			margin: 20px 0 0 0;
+			font-size: em(14px);
+			color: lighten($color-base, 15%);
+			@include breakpoint($max, $s-screen) {
+				margin: 10px 0 0 0;
+				font-size: em(13px);
+			}
+			ul {
+				@include clearfix;
+				li {
+					position: relative;
+					display: inline-block;
+					float: left;
+					line-height: 1.5em;
+					margin: 0 4px 0 0;
+					&.with-icon {
+						padding: 0 0 0 (16px + 5px);
+						i {
+							@include position(absolute, 50% 0 0 0px);
+							margin: -8px 0;
+						}
+					}
+					a {
+						@extend .link-primary;
+					}
+				}
+			}
+		}
+	}
+	.post-body {
+		p {
+			&:last-child {
+				margin: 0;
+			}
+		}
+	}
+}
