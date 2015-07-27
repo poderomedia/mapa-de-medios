@@ -225,6 +225,12 @@ exec /ruta/al/directorio/de/virtualenvs/mapa-de-medios/bin/gunicorn ${DJANGO_WSG
 
 ```
 
+`gunicorn.sh` necesita permisos de ejecución:
+
+```
+sudo chmod u+x gunicorn.sh
+```
+
 Crear `/etc/supervisor/conf.d/mapa-de-medios.conf`:
 
 ```
