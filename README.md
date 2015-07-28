@@ -106,18 +106,18 @@ create database nombre_de_la_bd;
 grant all privileges on nombre_de_la_bd.* to usuario@localhost identified by 'password';
 ```
 
-#### Configurar superuser
-
-Para acceder a la zona de administración del proyecto, debemos crear un superuser:
+#### Crear tablas
 
 ```
-python manager.py createsuperuser
+python manage.py syncdb
 ```
 
-Nos pedirá
+Nos pedirá crear un usuario admin (superuser), escribimos `yes`, le damos enter e ingresamos los datos:
   - Nombre de usuario: poner `admin` (o alguno a gusto, **ojo: será un usuario administrador**)
   - Email: dejar en blanco o poner una dirección de correo electrónico válida
   - Contraseña: poner alguna, no se permite dejar en blanco.
+
+#### Poblar la carpeta `static`
 
 ### Probar ambiente de desarrollo/prueba
 
