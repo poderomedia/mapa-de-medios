@@ -99,7 +99,8 @@ HAYSTACK_SEARCH_RESULTS_PER_PAGE = 1000
 #
 
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 10
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 100
 }
 
 ROOT_URLCONF = 'mediamapper.urls'
