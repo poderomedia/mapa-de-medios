@@ -27,7 +27,8 @@ Código de Mapa de Medios
 
     ```
     source ~/.bashrc
-    ```
+```
+
 
     Con esto tendremos instalado `virtualenvwrapper`, paquete que nos otorga los comandos `mkvirtualenv` y `workon` que usaremos más adelante.
 
@@ -73,23 +74,24 @@ Código de Mapa de Medios
 
   Agregar al archivo `mediamapper/local_settings.py`:
   ```python
-  SECRET_KEY = 'algún string largo y único'
+# -*- encoding: utf-8 -*-
+SECRET_KEY = 'algún string largo y único'
 
-  DEBUG = True  # cambiar a False si es entorno de producción
-  TEMPLATE_DEBUG = DEBUG
+DEBUG = True  # cambiar a False si es entorno de producción
+TEMPLATE_DEBUG = DEBUG
 
-  # Definir ALLOWED_HOSTS si DEBUG es False
-  ALLOWED_HOSTS = []
+# Definir ALLOWED_HOSTS si DEBUG es False
+#ALLOWED_HOSTS = []
 
-  DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'nombre_de_la_bd',
-          'USER': 'usuario',  # cambiar según configuración local
-          'PASSWORD': 'password',  # cambiar según config. local
-      }
-  }
-  ```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'nombre_de_la_bd',
+        'USER': 'usuario',  # cambiar según configuración local
+        'PASSWORD': 'password',  # cambiar según config. local
+    }
+}
+```
 
 En `mediamapper/local_settings.py` se pueden agregar todas las configuraciones que aplicarán al entorno local en el cual se está instalando el proyecto. Cualquier configuración añadida sobreescribirá lo definido en `mediamapper/settings.py`
 
