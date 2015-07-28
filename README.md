@@ -166,7 +166,7 @@ server {
 	}
 
     location /media/ {
-        alias /ruta/a/proyecto/clonado/mapa-de-medios/media/;
+        alias /ruta/a/proyecto/clonado/mapa-de-medios/mediamapper/media/; # ojo: es mediamapper/media
     }
 }
 ```
