@@ -4,19 +4,17 @@ Código de Mapa de Medios
 ## Instalación
 --------------
 
-**Nota:** los pasos siguientes son aplicables en Debian. Para otras distros pueden necesitar algunas modificaciones. Se asume que `mysql`, `git` y `python` están instalados, y que tenemos acceso root (o sudo).
+**Nota:** los pasos siguientes son aplicables en Debian. Para otras distros pueden necesitar algunas modificaciones. Se asume que `mysql`, `git` y `python` están instalados, y que tenemos acceso root (o sudo). Para los comandos que necesitan privilegios de administrador se usará sudo para notar fácilmente la diferencia.
 
 ### Instalar requerimientos previos
   - Instalar pip, virtualenvwrapper
 
-    Como `root`, para que quede instalado en el sistema:
     ```bash
-  apt-get install python-pip python-dev libmysqlclient-dev
+  sudo apt-get install python-pip python-dev libmysqlclient-dev
   ```
 
-    Como usuario normal, para que `pip` instale en el ambiente del usuario y no del sistema o de `root`:
     ```bash
-  pip install virtualenvwrapper
+  sudo pip install virtualenvwrapper
   ```
 
     Agregar lo siguiente a `~/.bashrc`, preferentemente al final:
@@ -24,6 +22,12 @@ Código de Mapa de Medios
   export WORKON_HOME=~/venvs
   source /usr/local/bin/virtualenvwrapper.sh
   ```
+
+    Hace falta activar esta configuración con:
+
+    ```
+    source ~/.bashrc
+    ```
 
     Con esto tendremos instalado `virtualenvwrapper`, paquete que nos otorga los comandos `mkvirtualenv` y `workon` que usaremos más adelante.
 
@@ -135,7 +139,7 @@ Las rutas disponibles son:
 Instalar nginx:
 
 ```
-apt-get install nginx
+sudo apt-get install nginx
 ```
 
 #### Configurar virtualhost
@@ -168,19 +172,21 @@ server {
 Activar el virtualhost:
 
 ```
-ln -s /etc/nginx/sites-available/mi-virtualhost /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/mi-virtualhost /etc/nginx/sites-enabled
 ```
 
 Reiniciar nginx:
 
-```service restart nginx ```
+```
+sudo service restart nginx
+```
 
 ### Configurar Supervisor
 
 Instalar supervisor:
 
 ```
-apt-get install supervisor
+sudo apt-get install supervisor
 ```
 
 Crear el archivo `gunicorn.sh` en la carpeta raíz del proycto:
@@ -244,12 +250,12 @@ stdout_logfile = /var/log/supervisor/%(program_name)s.log
 stderr_logfile = /var/log/supervisor/%(program_name)s-error.log
 ```
 
-Ejecutar como root lo siguiente, para agregar nuevo proceso a supervisor:
+Ejecutar (como root) lo siguiente, para agregar nuevo proceso a supervisor:
 
 ```
-supervisorctl reread
-supervisorctl update
-supervisorctl restart mapa-de-medios
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl restart mapa-de-medios
 ```
 
 Con esto podremos ir a http://dominio.com (dominio puesto en el virtualhost de nginx), y ver el proyecto listo para usarse.
