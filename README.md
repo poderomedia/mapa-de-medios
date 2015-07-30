@@ -180,7 +180,7 @@ sudo ln -s /etc/nginx/sites-available/mi-virtualhost /etc/nginx/sites-enabled
 Reiniciar nginx:
 
 ```
-sudo service restart nginx
+sudo service nginx restart
 ```
 
 ### Configurar Supervisor
