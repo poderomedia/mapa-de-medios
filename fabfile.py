@@ -135,34 +135,23 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
                     run("cp ../%s/%s %s" % (last_version, local_settings,
                                             local_settings))
                 else:
+                    # setear db_name con --set db_name="dbname"
+                    ctx = {
+                        'db_name': env.db_name,
+                        'db_user': env.db_user,
+                        'db_password': env.db_password,
+                        'secret_key': 'mi súper secreta llave'
+                    }
+                    print ctx
                     print "Se crea archivo nuevo de configuración local."
                     print "CONFIGURAR USUARIO, CONTRASEÑA, "
-                    run("touch %s" % local_settings)
-                    files.append(local_settings,
-                                 "# -*- encoding: utf-8 -*-\n"
-                                 "SECRET_KEY = \'algún string largo y "
-                                 "único\'\n"
-                                 "\n"
-                                 "DEBUG = True  # cambiar a False si "
-                                 "es entorno de producción\n"
-                                 "TEMPLATE_DEBUG = DEBUG\n"
-                                 "\n"
-                                 "# Definir ALLOWED_HOSTS si DEBUG es "
-                                 "False\n"
-                                 "#ALLOWED_HOSTS = []\n"
-                                 "\n"
-                                 "DATABASES = {\n"
-                                 "    'default': {\n"
-                                 "        'ENGINE': 'django.db.backends"
-                                 ".mysql',\n"
-                                 "        'NAME': 'nombre_de_la_bd',\n"
-                                 "        'USER': 'usuario', "
-                                 "# cambiar según configuración local\n"
-                                 "        'PASSWORD': 'password', "
-                                 "# cambiar según config. local\n"
-                                 "    }\n"
-                                 "}"
-                                 )
+                    local_settings_template = 'fabric_templates' +\
+                                              '/local_settings.py'
+                    files.upload_template(local_settings_template,
+                                          local_settings,
+                                          context=ctx, mode=0755,
+                                          use_jinja=False)
+                    run("cat %s" % local_settings)
                 # # fin paso 3
 
                 # sigo acá después del local settings
@@ -183,6 +172,7 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
 
         # se reinicia gunicorn
         restart_gunicorn(host, user)
+
 
 def deploy_staging():
     host = 'staging.poderopedia.org'
