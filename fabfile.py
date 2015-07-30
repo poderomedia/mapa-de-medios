@@ -7,6 +7,7 @@ import os
 import time
 
 from fabric.api import *
+from fabric.utils import abort
 from fabric.contrib import files
 
 locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
@@ -19,9 +20,24 @@ def hello():
     print("Hello world!")
 
 
-def restart_nginx(host, user='admin'):
+def restart_nginx(host, base_dir="/home/admin/html",
+                  port=8000, user='admin'):
+    ctx = {
+        'base_dir': base_dir,
+        'port': port,
+        'host': host
+    }
     with settings(host_string=host, user=user):
-        run("sudo service nginx restart")
+        nginx_conf = '/etc/nginx/sites-available/%s' % host
+        nginx_template = 'fabric_templates/nginx_template'
+        files.upload_template(nginx_template, nginx_conf,
+                              context=ctx, mode=0755, use_jinja=False,
+                              use_sudo=True)
+
+        sudo("cat %s" % nginx_conf)
+        sudo("rm -rf /etc/nginx/sites-enabled/%s" % host)
+        sudo("ln -s %s /etc/nginx/sites-enabled/" % nginx_conf)
+        sudo("service nginx restart")
 
 
 def restart_supervisor(host, user='admin'):
@@ -29,9 +45,27 @@ def restart_supervisor(host, user='admin'):
         run("sudo service supervisor restart")
 
 
-def restart_gunicorn(host, user='admin'):
+def restart_gunicorn(host, user='admin', base_dir='/home/admin/html/'):
+    ctx = {
+        'base_dir': base_dir + 'current'
+    }
     with settings(host_string=host, user=user):
-        run("sudo supervisorctl restart mapa-de-medios")
+        gunicorn_script = os.path.join(base_dir, 'current/gunicorn.sh')
+        gunicorn_source_file = 'fabric_templates/gunicorn_template.sh'
+        files.upload_template(gunicorn_source_file, gunicorn_script,
+                              context=ctx, mode=0755, use_jinja=False)
+        run("cat %s" % gunicorn_script)
+
+        supervisor_conf = '/etc/supervisor/conf.d/mapa-de-medios.conf'
+        supervisor_source_file = 'fabric_templates/supervisor_template.conf'
+        files.upload_template(supervisor_source_file, supervisor_conf,
+                              context=ctx, mode=0755, use_jinja=False,
+                              use_sudo=True)
+        sudo("cat %s" % supervisor_conf)
+
+        sudo("supervisorctl reread")
+        sudo("supervisorctl update")
+        sudo("supervisorctl restart mapa-de-medios")
 
 
 def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):

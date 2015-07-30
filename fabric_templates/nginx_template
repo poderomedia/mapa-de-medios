@@ -1,0 +1,20 @@
+server {
+    listen       80;
+    server_name  %(host)s; ## reemplazar con el que se usará
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:%(port)s;
+    }
+
+    location /static/ {
+        # autoindex on;
+        alias %(base_dir)s/current/static/;
+    }
+
+    location /media/ {
+        alias %(base_dir)s/current/mediamapper/media/;
+    }
+}
