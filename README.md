@@ -119,6 +119,10 @@ Nos pedirá crear un usuario admin (superuser), escribimos `yes`, le damos enter
 
 #### Poblar la carpeta `static`
 
+```
+python manage.py collectstatic --noinput
+```
+
 ### Probar ambiente de desarrollo/prueba
 
 Hasta aquí, ya tenemos lo suficiente y necesario para echar a andar el proyecto.
