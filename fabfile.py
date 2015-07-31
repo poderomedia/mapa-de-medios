@@ -213,7 +213,7 @@ def db_credentials():
     return db
 
 
-def dump_db(host='localhost'):
+def dump_db():
     db = db_credentials()
     timestamp = int(time.time())
     st_datetime = datetime.datetime.fromtimestamp(timestamp)
@@ -222,10 +222,8 @@ def dump_db(host='localhost'):
     print "Nombre de la base de datos: %s" % db['name']
     print "Nombre de usuario de la base de datos: %s" % db['user']
     print "Password de la base de datos: %s" % db['password']
-    with settings(host=host):
-        run('mysqldump -u %s -p"%s" %s > /tmp/db_backup-%s.sql' % (
-            db['user'],
-            db['password'],
-            db['name'],
-            st
-        ))
+    run('mysqldump -u %s -p"%s" %s > /tmp/db_backup-%s.sql' % (
+        db['user'],
+        db['password'],
+        db['name'],
+        st))
