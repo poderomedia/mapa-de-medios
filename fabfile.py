@@ -162,12 +162,6 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
                 run("cat %s" % local_settings)
                 # # fin paso 3
 
-                # sigo acá después del local settings
-                # # paso 4, base de datos
-                # ejecuto fab remotamente para que tome los datos
-                # del proyecto remoto
-                run("fab dump_db")
-
                 # # paso 5, collect static
                 # si no existe el virtualenv lo creo
                 if not files.exists('./env'):
@@ -176,6 +170,13 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
                 # ya creado el virtualenv lo activo
                 with prefix('source ./env/bin/activate'):
                     run('pip install -r requirements.txt')
+
+                    # # paso 4, base de datos
+                    # ejecuto fab remotamente para que tome los datos
+                    # del proyecto remoto
+                    # después de instalar los requirements
+                    run("fab dump_db")
+
                     run('./manage.py collectstatic --noinput')
                     run('./manage.py migrate')
                     run('./manage.py syncdb')
