@@ -161,6 +161,8 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
 
                 # sigo acá después del local settings
                 # # paso 4, base de datos
+                # ejecuto fab remotamente para que tome los datos
+                # del proyecto remoto
                 run("fab dump_db")
 
                 # # paso 5, collect static
@@ -213,7 +215,6 @@ def db_credentials():
     return db
 
 
-@hosts(['localhost'])
 def dump_db():
     db = db_credentials()
     timestamp = int(time.time())
@@ -223,7 +224,7 @@ def dump_db():
     print "Nombre de la base de datos: %s" % db['name']
     print "Nombre de usuario de la base de datos: %s" % db['user']
     print "Password de la base de datos: %s" % db['password']
-    run('mysqldump -u %s -p"%s" %s > /tmp/db_backup-%s.sql' % (
+    os.system('mysqldump -u %s -p"%s" %s > /tmp/db_backup-%s.sql' % (
         db['user'],
         db['password'],
         db['name'],
