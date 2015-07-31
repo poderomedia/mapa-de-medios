@@ -92,8 +92,6 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
         if not files.exists(base_dir):
             run("mkdir -p %s" % base_dir)
         with cd(base_dir):
-            run("rm -rf mapa-de-medios")
-
             # # paso 1
             timestamp = int(time.time())
             st_datetime = datetime.datetime.fromtimestamp(timestamp)
@@ -103,7 +101,7 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
             # se obtiene versión anterior para recuperar local settings
             print "Se obtiene última versión en %s " % base_dir
             last_version = 'ninguna'
-            output = run('ls %s' % base_dir)
+            output = run('ls -1 %s' % base_dir)
             files_ = output.split()
             if len(files_) > 0:
                 last_version = files_[-1]
@@ -117,15 +115,18 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
             # # paso 2
             # movemos current a old
             if files.exists('current'):
-                run("mv current old")
+                run("rm -rf old")  # borro antigua copia del old
+                run("cp -r %s old" % last_version)  # old es la última anterior
 
             # y creamos el que bajamos de nuevo
+            run("rm -rf current")
             run("ln -s %s current" % st_version)
             # # fin paso 2
 
             # entro a la carpeta current para trabajar ahí ahora
             with cd('current'):
                 run("pwd;ls -al ../current")
+                run("pwd;ls -al ../current/")
 
                 # # paso 3
                 local_settings = "mediamapper/local_settings.py"
