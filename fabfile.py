@@ -6,9 +6,14 @@ import os
 import time
 
 from fabric.api import *
-from fabric.contrib import files
+from fabric.contrib import files, django
 
-locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
+# importo los settings del proyecto
+django.project('mediamapper')
+from mediamapper import settings as project_settings
+
+
+#locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
 local_path = os.path.dirname(os.path.abspath(__file__))
 
 env.use_ssh_config = True
@@ -81,6 +86,8 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
     5. Instalar requirements, Collect static, migrate, syncdb
     6. Reiniciar gunicorn
     """
+    db = db_credentials()
+
     print "Pull in host: %s, branch: %s, at %s" % (host, branch, base_dir)
     with settings(host_string=host, user=user):
         if not files.exists(base_dir):
@@ -135,9 +142,9 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
                 else:
                     # setear db_name con --set db_name="dbname"
                     ctx = {
-                        'db_name': env.db_name,
-                        'db_user': env.db_user,
-                        'db_password': env.db_password,
+                        'db_name': db['name'],
+                        'db_user': db['user'],
+                        'db_password': db['password'],
                         'secret_key': 'mi súper secreta llave'
                     }
                     print ctx
@@ -154,7 +161,7 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
 
                 # sigo acá después del local settings
                 # # paso 4, base de datos
-                # me lo salto por ahora
+                run("fab dump_db:%s" % host)
 
                 # # paso 5, collect static
                 # si no existe el virtualenv lo creo
@@ -192,3 +199,33 @@ def deploy_production():
 
 def deploy_prod():
     deploy_production()
+
+
+def db_credentials():
+    '''
+    Obtiene las credenciales desde settings.py
+    '''
+    db = {
+        'name': project_settings.DATABASES['default']['NAME'],
+        'user': project_settings.DATABASES['default']['USER'],
+        'password': project_settings.DATABASES['default']['PASSWORD'],
+    }
+    return db
+
+
+def dump_db(host='localhost'):
+    db = db_credentials()
+    timestamp = int(time.time())
+    st_datetime = datetime.datetime.fromtimestamp(timestamp)
+    st = st_datetime.strftime("%Y-%m-%d_%H-%M-%S")
+    print "Usando los siguientes datos:"
+    print "Nombre de la base de datos: %s" % db['name']
+    print "Nombre de usuario de la base de datos: %s" % db['user']
+    print "Password de la base de datos: %s" % db['password']
+    with settings(host=host):
+        run('mysqldump -u %s -p"%s" %s > /tmp/db_backup-%s.sql' % (
+            db['user'],
+            db['password'],
+            db['name'],
+            st
+        ))
