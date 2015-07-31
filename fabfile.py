@@ -7,6 +7,7 @@ import time
 
 from fabric.api import *
 from fabric.contrib import files, django
+from fabric.operations import prompt
 
 # importo los settings del proyecto
 django.project('mediamapper')
@@ -86,8 +87,6 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
     5. Instalar requirements, Collect static, migrate, syncdb
     6. Reiniciar gunicorn
     """
-    db = db_credentials()
-
     print "Pull in host: %s, branch: %s, at %s" % (host, branch, base_dir)
     with settings(host_string=host, user=user):
         if not files.exists(base_dir):
@@ -117,7 +116,9 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
 
             # # paso 2
             # movemos current a old
-            run("mv current old")
+            if files.exists('current'):
+                run("mv current old")
+
             # y creamos el que bajamos de nuevo
             run("ln -s %s current" % st_version)
             # # fin paso 2
@@ -130,33 +131,34 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
                 local_settings = "mediamapper/local_settings.py"
                 last_local_settings = os.path.join(
                     base_dir,
-                    last_version,
+                    'old',
                     local_settings
                 )
-                if files.exists(last_local_settings):
+                if files.exists(last_local_settings + 'asd'):
                     print "Se restaura archivo de configuración local" + \
                         " anterior."
                     run("cat %s" % last_local_settings)
-                    run("cp ../%s/%s %s" % (last_version, local_settings,
-                                            local_settings))
+                    run("cp ../old/%s %s" % (local_settings, local_settings))
                 else:
-                    # setear db_name con --set db_name="dbname"
+                    db_name = prompt("What is the database name?")
+                    db_user = prompt("What is the database username?")
+                    db_password = prompt("What is the password?")
                     ctx = {
-                        'db_name': db['name'],
-                        'db_user': db['user'],
-                        'db_password': db['password'],
+                        'db_name': db_name,
+                        'db_user': db_user,
+                        'db_password': db_password,
                         'secret_key': 'mi súper secreta llave'
                     }
                     print ctx
                     print "Se crea archivo nuevo de configuración local."
-                    print "CONFIGURAR USUARIO, CONTRASEÑA, "
                     local_settings_template = 'fabric_templates' +\
                                               '/local_settings.py'
                     files.upload_template(local_settings_template,
                                           local_settings,
                                           context=ctx, mode=0755,
                                           use_jinja=False)
-                    run("cat %s" % local_settings)
+                print "Config en %s" % local_settings
+                run("cat %s" % local_settings)
                 # # fin paso 3
 
                 # sigo acá después del local settings
@@ -230,3 +232,28 @@ def dump_db(output_dir="./"):
         db['name'],
         st,
         output_dir))
+
+
+def set_local_settings(host, work_dir='/home/admin/html/current'):
+    db_name = prompt("What is the database name?")
+    db_user = prompt("What is the database username?")
+    db_password = prompt("What is the password?")
+    with settings(host_string=host):
+        with cd(work_dir):
+
+            local_settings = "mediamapper/local_settings.py"
+            ctx = {
+                'db_name': db_name,
+                'db_user': db_user,
+                'db_password': db_password,
+                'secret_key': 'mi súper secreta llave'
+            }
+            print ctx
+            print "Se crea archivo nuevo de configuración local."
+            local_settings_template = 'fabric_templates' +\
+                                      '/local_settings.py'
+            files.upload_template(local_settings_template,
+                                  local_settings,
+                                  context=ctx, mode=0755,
+                                  use_jinja=False)
+            run("cat %s" % local_settings)
