@@ -134,7 +134,7 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
                     'old',
                     local_settings
                 )
-                if files.exists(last_local_settings + 'asd'):
+                if files.exists(last_local_settings):
                     print "Se restaura archivo de configuración local" + \
                         " anterior."
                     run("cat %s" % last_local_settings)
@@ -226,7 +226,7 @@ def dump_db(output_dir="./"):
     print "Nombre de la base de datos: %s" % db['name']
     print "Nombre de usuario de la base de datos: %s" % db['user']
     print "Password de la base de datos: %s" % db['password']
-    os.system('mysqldump -u %s -p"%s" %s > $s/db_backup-%s.sql' % (
+    os.system('mysqldump -u %s -p"%s" %s > %s/db_backup-%s.sql' % (
         db['user'],
         db['password'],
         db['name'],
