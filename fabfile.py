@@ -116,8 +116,8 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
             # # fin paso 1
 
             # # paso 2
-            # se borra enlace actual
-            run("rm -rf current")
+            # movemos current a old
+            run("mv current old")
             # y creamos el que bajamos de nuevo
             run("ln -s %s current" % st_version)
             # # fin paso 2
