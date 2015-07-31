@@ -161,7 +161,7 @@ def deploy(host, branch, user='admin', base_dir='/home/admin/html/'):
 
                 # sigo acá después del local settings
                 # # paso 4, base de datos
-                run("fab dump_db")
+                dump_db()
 
                 # # paso 5, collect static
                 # si no existe el virtualenv lo creo
