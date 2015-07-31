@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-import glob
 import locale
 import os
 import time
 
 from fabric.api import *
-from fabric.utils import abort
 from fabric.contrib import files
 
 locale.setlocale(locale.LC_ALL, 'es_CL.utf8')
