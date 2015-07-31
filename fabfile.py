@@ -230,8 +230,8 @@ def dump_db(output_dir="./"):
         db['user'],
         db['password'],
         db['name'],
-        st,
-        output_dir))
+        output_dir,
+        st))
 
 
 def set_local_settings(host, work_dir='/home/admin/html/current'):
