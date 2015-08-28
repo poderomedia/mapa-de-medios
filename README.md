@@ -1,263 +1,101 @@
-# Mapa de medios
-Código de Mapa de Medios
-
-## Instalación
---------------
-
-**Nota:** los pasos siguientes son aplicables en Debian. Para otras distros pueden necesitar algunas modificaciones. Se asume que `mysql`, `git` y `python` están instalados, y que tenemos acceso root (o sudo). Para los comandos que necesitan privilegios de administrador se usará sudo para notar fácilmente la diferencia.
-
-### Instalar requerimientos previos
-  - Instalar pip, virtualenvwrapper
-
-    ```bash
-  sudo apt-get install python-pip python-dev libmysqlclient-dev
-  ```
-
-    ```bash
-  sudo pip install virtualenvwrapper
-  ```
-
-    Agregar lo siguiente a `~/.bashrc`, preferentemente al final:
-    ```bash
-  export WORKON_HOME=~/venvs
-  source /usr/local/bin/virtualenvwrapper.sh
-  ```
-
-    Hace falta activar esta configuración con:
-
-    ```
-    source ~/.bashrc
-```
-
-
-    Con esto tendremos instalado `virtualenvwrapper`, paquete que nos otorga los comandos `mkvirtualenv` y `workon` que usaremos más adelante.
-
-    Cuando creemos un entorno virtual con `mkvirtualenv`, dicho entorno se creará en la carpeta `~/venvs`. Esta carpeta puede ser cualquiera otra a gusto.
-
-  - Crear entorno virtual
-
-    Crearemos el entorno virtual `mapa-de-medios` (aunque puede ser cualquier otro nombre a gusto):
-    ```bash
-  mkvirtualenv mapa-de-medios
-  ```
-
-    Con esto aparecerá `(mapa-de-medios)` adelante de nuestro prompt, algo así:
-    ```
-	(mapa-de-medios) usuario@maquina:~ $
-    ```
-
-### Clonar el proyecto
-
-  Basta con ir a una carpeta donde tengamos nuestros proyectos, y hacemos:
-
-  * SSH:
-  ```
-  git clone git@github.com:poderomedia/mapa-de-medios.git
-  ```
-
-  * HTTPS (Para acceso público (sin llave SSH):
-  ```
-  git clone https://github.com/poderomedia/mapa-de-medios.git
-```
-
-### Instalar requerimientos
-
-  Ahora es turno de instalar los paquetes necesarios en nuestro entorno virtual, en el cual echaremos a correr este proyecto:
-  ```
-  cd mapa-de-medios # carpeta del proyecto recién clonado
-  pip install -r requirements.txt
-  ```
-
-### Configuración local del proyecto (local settings)
-
-  Es necesario crear un archivo que tenga los datos necesarios para que el proyecto funcione localmente. Esto también aplica para cuando estemos instalando el proyecto en un servidor, ya que "localmente" se referirá a ese servidor, y no a la máquina que estemos usando para desarrollar.
-
-  Agregar al archivo `mediamapper/local_settings.py`:
-  ```python
-# -*- encoding: utf-8 -*-
-SECRET_KEY = 'algún string largo y único'
-
-DEBUG = True  # cambiar a False si es entorno de producción
-TEMPLATE_DEBUG = DEBUG
-
-# Definir ALLOWED_HOSTS si DEBUG es False
-#ALLOWED_HOSTS = []
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'nombre_de_la_bd',
-        'USER': 'usuario',  # cambiar según configuración local
-        'PASSWORD': 'password',  # cambiar según config. local
-    }
-}
-```
-
-En `mediamapper/local_settings.py` se pueden agregar todas las configuraciones que aplicarán al entorno local en el cual se está instalando el proyecto. Cualquier configuración añadida sobreescribirá lo definido en `mediamapper/settings.py`
-
-#### Configurar base de datos
-
-En MySQL debemos crear la base de datos, y configurar los permisos correspondientes.
-
-En la consola MySQL podemos hacer lo siguiente:
-
-```sql
-create database nombre_de_la_bd;
-grant all privileges on nombre_de_la_bd.* to usuario@localhost identified by 'password';
-```
-
-#### Configurar superuser
-
-Para acceder a la zona de administración del proyecto, debemos crear un superuser:
-
-```
-python manager.py createsuperuser
-```
-
-Nos pedirá
-  - Nombre de usuario: poner `admin` (o alguno a gusto, **ojo: será un usuario administrador**)
-  - Email: dejar en blanco o poner una dirección de correo electrónico válida
-  - Contraseña: poner alguna, no se permite dejar en blanco.
-
-### Probar ambiente de desarrollo/prueba
-
-Hasta aquí, ya tenemos lo suficiente y necesario para echar a andar el proyecto.
-
-Podemos ejecutar lo siguiente para hacerlo:
-
-```
-python manage.py runserver
-```
-
-Esto echa a andar el servidor de desarrollo de Django, para poder ver nuestro proyecto localmente. Dicho servidor corre en [127.0.0.1:8000](http://127.0.0.1:8000)
-
-Las rutas disponibles son:
-  - [Admin (http://127.0.0.1:8000/admin)](http://127.0.0.1:8000/admin)
-  - [Home (http://127.0.0.1:8000/home)](http://127.0.0.1:8000/home)
-  - [Api (http://127.0.0.1:8000/api)](http://127.0.0.1:8000/api)
-
-### Configurar Nginx
-
-Instalar nginx:
-
-```
-sudo apt-get install nginx
-```
-
-#### Configurar virtualhost
-
-Crear un archivo en `/etc/nginx/sites-available/mi-virtualhost` con el siguiente contenido:
-
-```nginx
-server {
-    listen       80;
-    server_name  dominio.com; ## reemplazar con el que se usará
-
-    location / {
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header Host $http_host;
-		proxy_redirect off;
-        proxy_pass http://127.0.0.1:8000;
-	}
-
-    location /static/ {
-        # autoindex on;
-        alias /ruta/a/proyecto/clonado/mapa-de-medios/static/;
-	}
-
-    location /media/ {
-        alias /ruta/a/proyecto/clonado/mapa-de-medios/media/;
-    }
-}
-```
-
-Activar el virtualhost:
-
-```
-sudo ln -s /etc/nginx/sites-available/mi-virtualhost /etc/nginx/sites-enabled
-```
-
-Reiniciar nginx:
-
-```
-sudo service restart nginx
-```
-
-### Configurar Supervisor
-
-Instalar supervisor:
-
-```
-sudo apt-get install supervisor
-```
-
-Crear el archivo `gunicorn.sh` en la carpeta raíz del proycto:
-
-```bash
-#!/bin/bash
-NAME="mediamapper" # Name of the application
-DJANGODIR=/ruta/al/proyecto/mapa-de-medios # Django project directory
-SOCKFILE=$DJANGODIR'/gunicorn.sock' # we will communicte using this unix socket
-
-USER=`whoami` #www-data # the user to run as
-GROUP=`whoami` #www-data # the group to run as
-NUM_WORKERS=3 # how many worker processes should Gunicorn spawn
-
-MAX_REQUESTS=1 # reload the application server for each request
-DJANGO_SETTINGS_MODULE=mediamapper.settings # which settings file should Django use
-DJANGO_WSGI_MODULE=mediamapper.wsgi # WSGI module name
-
-echo "Starting $NAME as $USER"
-
-# Activate the virtual environment
-source /ruta/al/directorio/de/virtualenvs/mapa-de-medios/bin/activate
-
-export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
-export PYTHONPATH=$DJANGODIR:$PYTHONPATH
-# Create the run directory if it doesn’t exist
-RUNDIR=$(dirname $SOCKFILE)
-test -d $RUNDIR || mkdir -p $RUNDIR
-
-echo '*****************************'
-# Start your Django Unicorn
-
-# Programs meant to be run under supervisor should not daemonize themselves (do not use –daemon)
-exec /ruta/al/directorio/de/virtualenvs/mapa-de-medios/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
-     --name $NAME \
-     --workers $NUM_WORKERS \
-     --max-requests $MAX_REQUESTS \
-     --user $USER --group $GROUP \
-     --bind 0.0.0.0:8000 \
-     --log-level error \
-     --log-file -
-
-```
-
-`gunicorn.sh` necesita permisos de ejecución:
-
-```
-sudo chmod u+x gunicorn.sh
-```
-
-Crear `/etc/supervisor/conf.d/mapa-de-medios.conf`:
-
-```
-[program:mapa-de-medios]
-directory=/ruta/al/proyecto/mapa-de-medios
-command=/ruta/al/proyecto/mapa-de-medios/gunicorn.sh
-autostart=true
-autorestart=true
-user=admin
-stdout_logfile = /var/log/supervisor/%(program_name)s.log
-stderr_logfile = /var/log/supervisor/%(program_name)s-error.log
-```
-
-Ejecutar (como root) lo siguiente, para agregar nuevo proceso a supervisor:
-
-```
-sudo supervisorctl reread
-sudo supervisorctl update
-sudo supervisorctl restart mapa-de-medios
-```
-
-Con esto podremos ir a http://dominio.com (dominio puesto en el virtualhost de nginx), y ver el proyecto listo para usarse.
+<p>El Mapa de Medios de Chile y Colombia es una radiografía, susceptible de ser ampliada y actualizada, sobre la industria de medios en estos países, sus dueños, actores que inciden en las políticas públicas y la legislación sobre los medios de comunicación.</p>
+              <p>La iniciativa tuvo como objetivo investigar y reunir un amplio y detallado conjunto de datos sobre empresas, organizaciones y personas dueñas de los medios de comunicación en estos países, intentando develar a su vez conexiones políticas, posibles concentraciones mediáticas, marco regulatorio y organizaciones y personas que influyen en la legislación de los medios, con el fin de proporcionar un informe claro de quién es dueño de qué en el industria de los medios en ambas naciones, promover la transparencia y la divulgación de los vínculos entre grupos de medios de comunicación y otros grupos de interés.</p>
+			  <p>A su vez, esta iniciativa hizo un levantamiento de la legislación y políticas públicas relativas a la industria de medios y el periodismo en los países mencionados; e investigó cuáles son los principales actores de influencia sobre la regulación de los medios de comunicación, sean estos actores individuos u organizaciones.</p> 
+			  <p>Mapa de Medios además centró su esfuerzo en el suministro de datos abiertos estructurados que pueden ser utilizados como recursos para visualizaciones de datos, infografías, aplicaciones de noticias y de investigación.</p>
+        
+			 
+			  <h2>Quiénes trabajaron en este proyecto</h2>
+			  <p>La investigación consideró el trabajo simultáneo de dos equipos periodísticos en Chile y Colombia: Fundación Poderomedia con su equipo de <a href="http://www.poderopedia.org/cl/">Poderopedia Chile</a> y <a href="http://consejoderedaccion.org/">Consejo de Redacción</a> con su su equipo de <a href="http://www.poderopedia.org/co/">Poderopedia Colombia</a>.</p>
+			  <p>Coordinador general del proyecto: <b>Miguel Paz</b></p> 
+			  <p>Equipo de trabajo en Chile:</p>
+			  <ul>
+			      <li>Paola Mosso, coordinadora del proyecto.</li>
+				  <li>Felipe Perry, back-end e investigador.</li>
+				  <li>Mónica Ventura, periodista investigadora.</li>
+			  </ul>
+			  <p>Por su parte, Consejo de Redacción, a través de su equipo de Poderopedia Colombia, ejecutó el capítulo colombiano de la investigación sobre el estado actual los medios de comunicación en ese país.</p>
+			  <p>Equipo de trabajo en Colombia:</p>
+			  <ul>
+				<li>Miriam Forero Ariza, coordinadora del proyecto.</li>
+				<li>Mónica Vargas Salcedo, responsable de investigación.</li>
+				<li>Óscar Felipe Agudelo, periodista investigador.</li>
+				<li>Diego Legrand Pérez, periodista investigador.</li>
+			  </ul>
+			  
+        <h2>Cómo se hizo Mapa de Medios</h2>
+
+<p>El Mapa de Medios de Chile y Colombia es el resultado de una investigación de campo realizada entre diciembre de 2014  y abril de 2015, más dos hackdays o “Investigatones” (uno en cada país) a puerta cerrada donde se invitaron a académicos, expertos, periodistas, diseñadores y programadores a colaborar en la construcción de la base de datos y a mejorar el trabajo investigado.</p>
+
+<p>Este proyecto desarrolló una base de datos con información categorizada de medios, propiedad y datos descriptivos; un sitio web con información pública para la comunidad y un reporte periodístico sobre los medios de comunicación, quiénes son sus propietarios y qué otros intereses económicos tienen dichos dueños.</p> 
+
+
+<p><b>a.- Levantamiento de la información</b></p>
+  
+  
+  <p>El trabajo de investigativo consideró dos equipos periodísticos: Poderomedia (Chile) y Consejo de Redacción (Colombia), quienes escogieron una muestra de medios escritos (ver metodología), digitales, de radio y televisión, buscando responder a un criterio de selección con base en los medios que tienen mayor índice de percepción.</p> 
+  
+  <p>Ambos equipos realizaron una investigación documental y de campo que incluyó el levantamiento de información y reporteo sobre:</p>
+  
+  <ul><li>Medios de comunicación, propietarios y en qué otras áreas tienen negocios.</li> 
+    
+    <li>Se realizó una construcción de matriz de análisis, levantamiento de información, entrevistas de campo y análisis de información en función de variables de propiedad.</li>
+    
+    <li>Se realizó el levantamiento de las leyes que incide en la propiedad de los medios, en el ejercicio del periodismo, en la regulación de propiedad relativa a tipos de sociedades, libre competencia, concentración de empresas, publicidad estatal en medios de comunicación, transparencia sobre propiedad de medios y  acceso a información pública.</li>
+    
+    <li>Se desarrolló una matriz y sistematización de información legislativa en la base de datos, se realizó un levantamiento de información legislativa y recomendaciones en torno a transparencia de información de propiedad de medios y se analizó la legislación en torno a la propiedad de medios.</li>
+    
+    <li>Se identificaron los grupos y entidades de influencia respecto de la legislación relativa a medios y se sistematizó la información levantada en la investigación y se realizaron entrevistas de campo.</li></ul>
+  
+  <p><b>b.- Cómo se seleccionaron los medios investigados</b></p>
+  
+  <p>Se investigaron medios de comunicación en cuatro tipo de categorías:</p>
+  <ul><li>Medio impreso</li>
+    <li>Radios</li>
+    <li>Canales de televisión</li>
+    <li>Medios digitales</li></ul>
+  
+  <p>Se consideraron los siguientes criterios de selección para cada categoría de medios de comunicación:</p>
+  
+  <p>Medio impreso:</p>
+
+  <ul>
+  <li>Cobertura nacional: Circulación nacional en el respectivo país.</li>
+    <li>Cobertura regional o locales.</li>
+    <li>Medios regionales en Chile: Medios de comunicación impresos que se distribuyen en tres o más ciudades en una región que cubren temáticas de sus regiones correspondientes.</li>
+    <li>Medios locales en Colombia: Medios de comunicación impresos que se distribuyen en las ciudades capitales que cubren temáticas de sus departamentos correspondientes.</li></ul>
+  
+  
+  <p>Radios:</p>
+
+  <ul><li>Cobertura nacional: Transmisión nacional.</li>
+    <li>Cobertura regional o locales.</li>
+    <li>Para medios de radiodifusión se considerarán las 30 radios con mayor audiencia a nivel nacional de acuerdo a organismo de análisis de mayor validación en respectivo país.</li>
+    <li>Concesión de organismo regulatorio.</li></ul>
+  
+  <p>Televisión:</p>
+  <ul><li>Canales de televisión abierta de cobertura nacional.</li>
+    <li>Canales de televisión abierta de cobertura regional o por departamento.</li>
+    <li>Canales de televisión de cable de cobertura nacional correspondientes al país de estudio.</li>
+    <li>Canales digitales.</li>
+    <li>Concesión de organismo regulatorio.</li></ul>
+  
+  <p>Medios digitales:</p>
+
+  <ul><li>Medios digitales de género generalista, noticioso o reportajes.</li>
+    <li>Considerando ambas categorías se considerará un total de 30 medios respecto de los visitantes únicos consignados en Ranking Alexa.</li> 
+    <li>A modo de excepción, se incorporaron en la investigación medios de carácter generalista o reportajes que han validado su relevancia a través del estudio “Mapping Digital Media”, Open Society Foundations (2012) y del Primer y Segundo “Estudio de Medios Digitales” en Colombia, desarrollado por Consejo de Redacción, la Facultad de Comunicación y Lenguaje de la Universidad Javeriana y el Centro Ático (2010, 2012).</li>
+    <li>Se incorporaron en los atributos de medios digitales si pertenecen a empresa periodística.</li></ul>
+  
+  <p><b>c.- Productos consolidados</b></p>
+  
+  <p>Como resultado de la investigación se entregaron los siguientes productos consolidados susceptibles de ser profundizados y mejorados:</p>
+  
+  <ul>
+  <li>Plataforma de ingreso de datos. Los datos recolectados, es decir, la información general, cobertura y presencia, ejecutivos, etc. y los datos referentes a la propiedad de los medios se ha ingresado en una aplicación creada para tal fin, la que ha sido alimentada las investigaciones en Chile y Colombia.</li>
+  
+  <li>Una base de datos pública de medios, propietarios y legislación. Esta base de datos está disponible en este sitio web. La información se ofrece con metadatos bajo estándar de datos abiertos que incluye: datos disponibles en tablas con filtros y búsqueda, datos para descarga en formato CSV, XLS, Json y una API de consulta.</li> 
+  
+  <li>Un reporte periodístico que da cuenta de cómo se estructura la industria de medios en cada país.</li> 
+  
+  <li>Una guía general de cómo realizar investigaciones de este tipo en otros países y la metodología usada.</li>
+  </ul>
