@@ -69,3 +69,20 @@
 <li>Un reporte periodístico que da cuenta de cómo se estructura la industria de medios en cada país.</li> 
 <li>Una guía general de cómo realizar investigaciones de este tipo en otros países y la metodología usada.</li>
 </ul>
+
+<h2>Datos importantes sobre archivos csv para subir datos</h2>
+<h3>Grupo</h3>
+<p>Los Grupos son los grandes dueños de los medios de un país. Generalmente tienen negocios en otras áreas de la economía y poseen medios en varias plataformas.</p>
+<h3>Nombre del Grupo</h3>
+<p>Puede ser un nombre que el mismo Grupo usa o bien un nombre con el cual se reconoce al Grupo en su país y el mundo. Ej: Grupo El Mercurio de Chile, no se identifica a sí mismo con ese nombre pero es reconocido en el país en forma fácil y clara con los medios que maneja y su controlador.</p>
+<h3>Controlador de Grupo</h3>
+<p>Es la persona o la sociedad que controla la mayor parte del porcentaje de peropiedad del medio. Puede ser nacional o extranjero.</p>
+<h3>País origen</h3>
+<p>País de origen del controlador del medio</p>
+<h3>Link Controlador</h3>
+<p>URL al perfil del controlador del Grupo (si existe un perfil en algún sitio)</p>
+<h3>Fecha actualización</h3>
+<p>Es asignada en forma directa por la base de datos</p>
+<h3>app - País</h3>
+<p>País de la aplicación, se asigna en forma automática desde el modelo de datos</p>
+
